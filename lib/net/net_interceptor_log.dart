@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 
 ///日志拦截器
 class NetInterceptorLog extends Interceptor {
@@ -22,12 +23,11 @@ class NetInterceptorLog extends Interceptor {
         requestStr += "- BODY:\n${data.toString()}\n";
       }
     }
-    const isProd = bool.fromEnvironment('dart.vm.product');
-    if (isProd) {
-      print(requestStr);
+    // const isProd = bool.fromEnvironment('dart.vm.product');
+    debugPrint(requestStr);
 
-      print('debug: $requestStr');
-    }
+    debugPrint('debug: $requestStr');
+
     handler.next(options);
   }
 
@@ -51,13 +51,14 @@ class NetInterceptorLog extends Interceptor {
     errorStr +=
         "- HEADER:\n${err.response!.headers.map.mapToStructureString()}\n";
     if (err.response != null && err.response!.data != null) {
-      print('╔ ${err.type.toString()}');
+      debugPrint('╔ ${err.type.toString()}');
       errorStr += "- ERROR:\n$responseStr\n";
     } else {
-      errorStr += "- ERRORTYPE: ${err.type}\n";
+      errorStr += "- ERROR_TYPE: ${err.type}\n";
       errorStr += "- MSG: ${err.message}\n";
     }
-    print(errorStr);
+
+    debugPrint(errorStr);
 
     handler.next(err);
   }
@@ -84,7 +85,7 @@ class NetInterceptorLog extends Interceptor {
 
   void printWrapped(String text) {
     final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
-    pattern.allMatches(text).forEach((match) => print(match.group(0)));
+    pattern.allMatches(text).forEach((match) => debugPrint(match.group(0)));
   }
 
   String _parseResponse(Response<dynamic> response) {
@@ -148,7 +149,6 @@ extension List2StringEx on List {
       result = result.substring(0, result.length - 1);
       result += "\n$indentationStr]";
     }
-
     return result;
   }
 }

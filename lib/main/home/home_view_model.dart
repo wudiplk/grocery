@@ -5,18 +5,8 @@ import 'home_model.dart';
 
 @injectable
 class HomeViewModel extends BaseViewModel<HomeModel> {
-  getWeather() {
-    model.getWeather();
-    notifyListeners();
-  }
-
-  getPicture() {
-    model.getPicture();
-    notifyListeners();
-  }
-
-  getPictureNew() {
-    model.getPictureNew();
+  getDept() {
+    model.getDept();
     notifyListeners();
   }
 }

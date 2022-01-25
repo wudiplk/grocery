@@ -19,7 +19,7 @@ class NetManager {
   ///通用全局单例，第一次使用时初始化
   NetManager._internal() {
     _dio = Dio(BaseOptions(
-        baseUrl: NetUrl.baseUrl,
+        baseUrl: NetUrl.dataBaseUrl,
         connectTimeout: connectTimeOut,
         receiveTimeout: receiveTimeout));
     _dio.interceptors.add(NetInterceptorLog());
@@ -41,8 +41,8 @@ class NetManager {
 
   ///一般请求，默认域名
   NetManager _normal() {
-    if (_dio.options.baseUrl != NetUrl.baseUrl) {
-      _dio.options.baseUrl = NetUrl.baseUrl;
+    if (_dio.options.baseUrl != NetUrl.dataBaseUrl) {
+      _dio.options.baseUrl = NetUrl.dataBaseUrl;
     }
     return this;
   }
@@ -52,15 +52,12 @@ class NetManager {
     if (withLoading) {
       NetLoading.show();
     }
-    params["api_key"] = "46892fc5671813f2";
-    Response response =
-        Response(requestOptions: RequestOptions(path: NetUrl.baseUrl));
     try {
-      response = await _dio.get(api, queryParameters: params);
+      var response = await _dio.get(api, queryParameters: params);
       if (withLoading) {
         NetLoading.dismiss();
       }
-      return JsonConvert.fromJsonAsT<T>(response.data);
+      return JsonConvert.fromJsonAsT<T>(response.data) as T;
     } on DioError catch (e) {
       if (withLoading) {
         NetLoading.dismiss();
@@ -74,15 +71,12 @@ class NetManager {
     if (withLoading) {
       NetLoading.show();
     }
-    params["api_key"] = "b91a8c7f8ce8b724";
-    Response<T> response =
-        Response(requestOptions: RequestOptions(path: NetUrl.baseUrl));
     try {
-      response = await _dio.post(api, queryParameters: params);
+      var response = await _dio.post(api, queryParameters: params);
       if (withLoading) {
         NetLoading.dismiss();
       }
-      return JsonConvert.fromJsonAsT<T>(response.data);
+      return JsonConvert.fromJsonAsT<T>(response.data) as T;
     } on DioError catch (e) {
       if (withLoading) {
         NetLoading.dismiss();
