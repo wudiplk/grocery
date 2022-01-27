@@ -24,8 +24,8 @@ abstract class BaseViewModel<M extends Object> extends ChangeNotifier
 
   @override
   void init() {
+    // 获取数据类
     model = getIt.get<M>();
-    debugPrint(model.toString());
   }
 }
 

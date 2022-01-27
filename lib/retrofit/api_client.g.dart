@@ -6,9 +6,11 @@ part of 'api_client.dart';
 // RetrofitGenerator
 // **************************************************************************
 
+// ignore_for_file: unnecessary_brace_in_string_interps
+
 class _ApiClient implements ApiClient {
   _ApiClient(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'https://api.muxiaoguo.cn/';
+    baseUrl ??= 'https://data.zahuopu.top';
   }
 
   final Dio _dio;
@@ -16,21 +18,20 @@ class _ApiClient implements ApiClient {
   String? baseUrl;
 
   @override
-  Future<dynamic> getTian(method, apiKey, type) async {
+  Future<List<RetrofitDept>> getDept() async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{
-      r'method': method,
-      r'api_key': apiKey,
-      r'type': type
-    };
+    final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final _result = await _dio.fetch(_setStreamType<dynamic>(
-        Options(method: 'GET', headers: _headers, extra: _extra)
-            .compose(_dio.options, 'api/sjbz?',
-                queryParameters: queryParameters, data: _data)
-            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = _result.data;
+    final _result = await _dio.fetch<List<dynamic>>(
+        _setStreamType<List<RetrofitDept>>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/depart/selectAll',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    var value = _result.data!
+        .map((dynamic i) => RetrofitDept.fromJson(i as Map<String, dynamic>))
+        .toList();
     return value;
   }
 

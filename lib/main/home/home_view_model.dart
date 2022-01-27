@@ -5,8 +5,13 @@ import 'home_model.dart';
 
 @injectable
 class HomeViewModel extends BaseViewModel<HomeModel> {
-  getDept() {
-    model.getDept();
+  getDept() async {
+    await model.getDept();
+    notifyListeners();
+  }
+
+  getDeptRetrofit() async {
+    await model.getDept();
     notifyListeners();
   }
 }

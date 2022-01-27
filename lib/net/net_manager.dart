@@ -19,6 +19,12 @@ class NetManager {
   ///通用全局单例，第一次使用时初始化
   NetManager._internal() {
     _dio = Dio(BaseOptions(
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": "true",
+          "Access-Control-Allow-Headers": "authorization",
+          "Access-Control-Allow-Methods": "OPTIONS,HEAD,GET,PUT,POST,DELETE,PATCH",
+        },
         baseUrl: NetUrl.dataBaseUrl,
         connectTimeout: connectTimeOut,
         receiveTimeout: receiveTimeout));
