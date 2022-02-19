@@ -38,7 +38,7 @@ dependencies:
   flutter_easyloading: ^3.0.3
   shared_preferences: ^2.0.8
   url_launcher: ^6.0.20
-  flare_flutter: ^3.0.2
+  rive: ^0.8.1
   provider: ^6.0.1
   get_it: ^7.2.0
   injectable: ^1.5.0
@@ -68,5 +68,11 @@ flutter:
   uses-material-design: true
   assets:
     - images/avatar.png
+    - anim/bike.riv
+    - anim/fishbowl.riv
+    - anim/system.riv
+    - anim/example.riv
+    - anim/rope.riv
+    - anim/trottman.riv
 flutter_intl:
   enabled: true

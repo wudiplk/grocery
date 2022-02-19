@@ -69,7 +69,7 @@ class Insets {
   static const double large = 20;
   static const double extraLarge = 30;
 
-  static const double superLarge = 50;
+  static const double superLarge = 58;
 
 
   static const double padding_8 = 8;
@@ -101,7 +101,7 @@ class TextStyles {
       fontWeight: FontWeight.normal, fontSize: 16, color: Global.themeColor);
   static TextStyle h3 = TextStyle(
     fontWeight: FontWeight.bold,
-    fontSize: 12,
+    fontSize: 18,
     color: Global.themeColor,
   );
   static late TextStyle body1 = raleWay.copyWith(color: Global.themeColor);

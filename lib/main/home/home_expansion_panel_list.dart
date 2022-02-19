@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grocery/com/global.dart';
-import 'package:grocery/widget/home_expand_icon.dart';
+
+import 'home_expand_icon.dart';
 
 const double _kPanelHeaderCollapsedHeight = 58.0;
 const double _kPanelHeaderExpandedHeight = 70.0;
@@ -61,7 +62,6 @@ class HomeExpansionPanelList extends StatelessWidget {
               child: HomeExpandIcon(
                 color: Global.themeColor,
                 isExpanded: _isChildExpanded(index),
-                padding: const EdgeInsets.all(16.0),
                 onPressed: (bool isExpanded) {
                 },
               ),

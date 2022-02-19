@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MVVM',
+      title: S().title,
       theme: ThemeData(
         primarySwatch: Global.themes[Global.profile.theme],
       ),
