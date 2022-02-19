@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:grocery/main/home/RetrofitDept.dart';
 import 'package:retrofit/http.dart';
 
+import '../model/retrofit_dept.dart';
 import 'base_dio.dart';
 
 part 'api_client.g.dart';

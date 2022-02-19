@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-part 'RetrofitDept.g.dart';
+part 'retrofit_dept.g.dart';
 @JsonSerializable()
 class RetrofitDept {
   String? id;

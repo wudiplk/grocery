@@ -1,38 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:grocery/main/home/home_page.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:grocery/main/good/good_page.dart';
 
+import 'com/global.dart';
 import 'com/injection/injection.dart';
-import 'com/env_config.dart';
+import 'generated/l10n.dart';
+import 'main/home/home_page.dart';
 
 void main() {
-  // Global.init().then((value) => runApp(const MyApp()));
   configureDependencies();
-  runApp(const MyApp());
+  Global.init().then((value) => runApp(const MyApp()));
+  // runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'MVVM',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: Global.themes[Global.profile.theme],
       ),
-      home: const HomePage(),
       builder: EasyLoading.init(),
+      home: const HomePage(),
+      routes: <String, WidgetBuilder>{
+        'GoodMain': (context) => const GoodMain(),
+      },
+      supportedLocales: S.delegate.supportedLocales,
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      onGenerateRoute: (RouteSettings settings) {
+        String? routeName = settings.name;
+        debugPrint("onGenerateRoute $routeName");
+        switch (routeName) {
+          case "GoodMain":
+            return MaterialPageRoute(builder: (BuildContext context) {
+              return Scaffold(
+                body: Center(
+                  child: Text("$routeName Page not Found"),
+                ),
+              );
+            });
+          default:
+            return MaterialPageRoute(builder: (BuildContext context) {
+              return Scaffold(
+                body: Center(
+                  child: Text("$routeName default Page not Found"),
+                ),
+              );
+            });
+        }
+      },
     );
   }
 }

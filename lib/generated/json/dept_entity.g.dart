@@ -1,5 +1,5 @@
 import 'package:grocery/generated/json/base/json_convert_content.dart';
-import 'package:grocery/main/home/dept_entity.dart';
+import 'package:grocery/model/dept_entity.dart';
 
 DeptEntity $DeptEntityFromJson(Map<String, dynamic> json) {
 	final DeptEntity deptEntity = DeptEntity();

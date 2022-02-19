@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'base_view_model.dart';
 import '../com/injection/injection.dart';
 
-class BaseState<W extends StatefulWidget, VM extends BaseViewModel>
+abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel>
     extends State<W> with BaseStateInterface {
   late VM viewModel;
 
@@ -24,19 +24,18 @@ class BaseState<W extends StatefulWidget, VM extends BaseViewModel>
     viewModel.context = context;
     // 初始ViewModel
     viewModel.init();
+
+    onBuildStart();
   }
 
   @override
   Widget build(BuildContext context) {
     return build(context);
   }
-
-  @override
-  void onBuildFinish() {
-    // TODO: implement onBuildFinish
-  }
 }
 
 abstract class BaseStateInterface {
   void onBuildFinish();
+
+  void onBuildStart();
 }
