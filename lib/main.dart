@@ -10,8 +10,8 @@ import 'main/home/home_page.dart';
 
 void main() {
   configureDependencies();
-  Global.init().then((value) => runApp(const MyApp()));
-  // runApp(const MyApp());
+  // Global.init().then((value) => runApp(const MyApp()));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

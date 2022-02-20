@@ -66,90 +66,118 @@ class _HomeState extends BaseState<HomePage, HomeViewModel> {
 
   Widget buildBody(MediaQueryData queryData) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.max,
       children: [
         Responsive.isSmallScreen(context)
             ? const SizedBox()
-            : SizedBox(
-                width: Responsive.isLargeScreen(context) ? 220 : 58,
-                child: const HomeDrawer(),
-              ),
+            : const HomeDrawer(),
         Expanded(
-          child: Column(
+          child: Flex(
+            direction: Axis.vertical,
             children: [
-              Stack(
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: const RiveAnimation.asset(
-                      "anim/rope.riv",
-                      fit: BoxFit.cover,
+              Expanded(
+                child: buildContent(),
+                flex: 3,
+              ),
+              Responsive.isMobileDevice
+                  ? const SizedBox()
+                  : Expanded(
+                      child: buildFooter(),
+                      flex: 0,
                     ),
-                    height: Responsive.isSmallScreen(context) ? 260 : 360,
-                  ),
-                  const HomeAppBar(),
-                ],
-              ),
-              Flexible(
-                child: ListView.builder(
-                  itemCount: tempData.length,
-                  controller: ScrollController(),
-                  itemBuilder: (BuildContext context, int index) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 18, bottom: 18),
-                          child: TextButton.icon(
-                              onPressed: () {},
-                              icon: Icon(tempData.elementAt(index).iconData),
-                              label: Text(
-                                tempData.elementAt(index).title,
-                                style: TextStyles.h3,
-                              )),
-                        ),
-                        Wrap(
-                          direction: Axis.horizontal,
-                          spacing: 8.0,
-                          runSpacing: 4.0,
-                          alignment: WrapAlignment.start,
-                          children: List<ClipRRect>.generate(11, (index) {
-                            return ClipRRect(
-                              borderRadius: BorderRadius.circular(5.0),
-                              child: Container(
-                                height: 36,
-                                width: 160,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: const [
-                                    Icon(Icons.ac_unit),
-                                    Text("百度"),
-                                    Icon(Icons.keyboard_arrow_right)
-                                  ],
-                                ),
-                                color: Colors.grey,
-                              ),
-                            );
-                          }),
-                        )
-                      ],
-                    );
-                  },
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: TextButton(
-                    onPressed: () async {
-                      var _url = "https://beian.miit.gov.cn/";
-                      if (!await launch(_url)) throw 'Could not launch $_url';
-                    },
-                    child: const Text('粤ICP备2021107512号')),
-              )
             ],
           ),
-        )
+        ),
+      ],
+    );
+  }
+
+  Widget buildContent() {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Stack(
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: const RiveAnimation.asset(
+                  "anim/rope.riv",
+                  fit: BoxFit.cover,
+                ),
+                height: Responsive.isSmallScreen(context) ? 260 : 360,
+              ),
+              const HomeAppBar(),
+            ],
+          ),
+          ListView.builder(
+              itemCount: tempData.length,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (BuildContext buildContext, int index) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 18, bottom: 18),
+                      child: TextButton.icon(
+                          onPressed: () {},
+                          icon: Icon(tempData.elementAt(index).iconData),
+                          label: Text(
+                            tempData.elementAt(index).title,
+                            style: TextStyles.h3,
+                          )),
+                    ),
+                    Wrap(
+                      direction: Axis.horizontal,
+                      spacing: 8.0,
+                      runSpacing: 4.0,
+                      alignment: WrapAlignment.start,
+                      children: List<ClipRRect>.generate(11, (index) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Container(
+                            height: 36,
+                            width: 160,
+                            color: Colors.white,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisSize: MainAxisSize.min,
+                              children: const [
+                                Icon(Icons.ac_unit),
+                                Text("百度"),
+                                Icon(Icons.keyboard_arrow_right)
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                    )
+                  ],
+                );
+              }),
+          Responsive.isMobileDevice ? buildFooter() : const SizedBox(),
+        ],
+      ),
+    );
+  }
+
+  Widget buildFooter() {
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      alignment: WrapAlignment.center ,
+      direction: Responsive.isMobileDevice ? Axis.vertical : Axis.horizontal,
+      children: [
+        const Text('Copyright © 2022 异度空间'),
+        TextButton(
+            onPressed: () async {
+              var _url = "https://beian.miit.gov.cn/";
+              if (!await launch(_url)) {
+                throw 'Could not launch $_url';
+              }
+            },
+            child: const Text('粤ICP备2021107512号')),
+        const Text('Designed by 异度空间'),
       ],
     );
   }
