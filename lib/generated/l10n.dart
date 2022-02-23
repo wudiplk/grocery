@@ -50,10 +50,10 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `Mountain Grocery`
+  /// `AlmightyGrocery`
   String get title {
     return Intl.message(
-      'Mountain Grocery',
+      'AlmightyGrocery',
       name: 'title',
       desc: '',
       args: [],

@@ -1,10 +1,12 @@
-import 'dart:html';
-
 import 'package:flutter/cupertino.dart';
+import 'package:grocery/base/base_state.dart';
+import 'package:grocery/base/base_stateful_widget.dart';
+import 'package:grocery/main/home/home_model.dart';
+import 'package:grocery/main/home/home_view_model.dart';
+import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 
-class RiveSystem extends StatefulWidget {
-  const RiveSystem({Key? key}) : super(key: key);
+class RiveSystem extends BaseStatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
@@ -13,7 +15,7 @@ class RiveSystem extends StatefulWidget {
   }
 }
 
-class _RiveSystem extends State<RiveSystem> {
+class _RiveSystem extends BaseState<RiveSystem, HomeViewModel> {
   // Controller for playback
   late RiveAnimationController _controller;
 
@@ -28,17 +30,31 @@ class _RiveSystem extends State<RiveSystem> {
   void initState() {
     super.initState();
     _controller = SimpleAnimation('idle');
-
   }
 
   @override
   Widget build(BuildContext context) {
-    return RiveAnimation.asset(
-      'anim/bike.riv',
-      controllers: [_controller],
-      onInit: (_) => setState(() {
-        _controller.isActive = true;
-      }),
+    return Consumer<HomeModel>(
+      builder: (BuildContext context, HomeModel homeModel, _) {
+        return RiveAnimation.asset(
+          'anim/bike.riv',
+          controllers: [_controller],
+          fit: BoxFit.cover,
+          onInit: (_) => setState(() {
+            _controller.isActive = true;
+          }),
+        );
+      },
     );
+  }
+
+  @override
+  void onBuildFinish() {
+    // TODO: implement onBuildFinish
+  }
+
+  @override
+  void onBuildStart() {
+    // TODO: implement onBuildStart
   }
 }

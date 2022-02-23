@@ -14,4 +14,8 @@ class HomeViewModel extends BaseViewModel<HomeModel> {
     await model.getDept();
     notifyListeners();
   }
+
+  void pauseAnim() {
+    notifyListeners();
+  }
 }

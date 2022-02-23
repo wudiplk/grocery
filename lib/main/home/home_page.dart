@@ -4,11 +4,11 @@ import 'package:grocery/base/base_stateful_widget.dart';
 import 'package:grocery/generated/l10n.dart';
 import 'package:grocery/main/home/home_app_bar.dart';
 import 'package:grocery/widget/responsive.dart';
+import 'package:grocery/widget/rive_system.dart';
 import 'package:grocery/widget/temp_data.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'home_drawer.dart';
 import 'home_view_model.dart';
 
@@ -25,6 +25,13 @@ class _HomeState extends BaseState<HomePage, HomeViewModel> {
   late int index = 0;
 
   late MediaQueryData queryData;
+
+  final ScrollController _scrollController = ScrollController();
+
+  // 是否显示“返回到顶部”按钮
+  bool showToTopBtn = false;
+
+  bool isPauseAnime = false;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +70,21 @@ class _HomeState extends BaseState<HomePage, HomeViewModel> {
   }
 
   @override
-  void onBuildStart() {}
+  void onBuildStart() {
+    _scrollController.addListener(() {
+      if (Responsive.isMediumScreen(context)) {
+        if (_scrollController.offset > 260) {
+          isPauseAnime=true;
+          viewModel.pauseAnim();
+        }
+      } else {
+        if (_scrollController.offset > 360) {
+          isPauseAnime=true;
+          viewModel.pauseAnim();
+        }
+      }
+    });
+  }
 
   Widget buildBody(MediaQueryData queryData) {
     return Row(
@@ -96,80 +117,20 @@ class _HomeState extends BaseState<HomePage, HomeViewModel> {
 
   Widget buildContent() {
     return SingleChildScrollView(
+      controller: _scrollController,
       child: Column(
         children: [
           Stack(
             children: [
               SizedBox(
                 width: double.infinity,
-                child: const RiveAnimation.asset(
-                  "anim/rope.riv",
-                  fit: BoxFit.cover,
-                ),
+                child:  const RiveSystem(),
                 height: Responsive.isSmallScreen(context) ? 260 : 360,
               ),
               const HomeAppBar(),
             ],
           ),
-          Padding(
-            padding: EdgeInsets.all(Insets.padding_16),
-            child: const Text("南方小城镇的少年时代是我曾经熟悉却已远离的过往，"
-                "嘉佳用极具时代感的语言和生动的画面感，书写了一个充满江南味道的成长故事。"
-                "离现实很远，离往事很近。作家总会从自己的经验和记忆出发来构建大厦，"
-                "也是基于此，我愿意相信这个故事的真诚与坦率，我也相信虚构背后的真实，"
-                "温柔与善良的底色。 故事里的外婆是让我印象最为深刻的人物，相较于爱情，亲情总是容易被忽略却更震撼人心的部分。"
-                "一些孤独的人拼凑起暂时的圆满，转瞬之间，永远的离别已经到来。无常与幻灭是写作者最钟爱的主题。"
-                "在一个轻描淡写的时代里，嘉佳的轻，状如云图，嘉佳的淡，有阳光的色泽与气味南方小城镇的少年时代是我曾经熟悉却已远离的过往，"
-                "嘉佳用极具时代感的语言和生动的画面感，书写了一个充满江南味道的成长故事。"
-                "离现实很远，离往事很近。作家总会从自己的经验和记忆出发来构建大厦，"
-                "也是基于此，我愿意相信这个故事的真诚与坦率，我也相信虚构背后的真实，"
-                "温柔与善良的底色。 故事里的外婆是让我印象最为深刻的人物，相较于爱情，亲情总是容易被忽略却更震撼人心的部分。"
-                "一些孤独的人拼凑起暂时的圆满，转瞬之间，永远的离别已经到来。无常与幻灭是写作者最钟爱的主题。"
-                "在一个轻描淡写的时代里，嘉佳的轻，状如云图，嘉佳的淡，有阳光的色泽与气味南方小城镇的少年时代是我曾经熟悉却已远离的过往，"
-                "嘉佳用极具时代感的语言和生动的画面感，书写了一个充满江南味道的成长故事。"
-                "离现实很远，离往事很近。作家总会从自己的经验和记忆出发来构建大厦，"
-                "也是基于此，我愿意相信这个故事的真诚与坦率，我也相信虚构背后的真实，"
-                "温柔与善良的底色。 故事里的外婆是让我印象最为深刻的人物，相较于爱情，亲情总是容易被忽略却更震撼人心的部分。"
-                "一些孤独的人拼凑起暂时的圆满，转瞬之间，永远的离别已经到来。无常与幻灭是写作者最钟爱的主题。"
-                "在一个轻描淡写的时代里，嘉佳的轻，状如云图，嘉佳的淡，有阳光的色泽与气味南方小城镇的少年时代是我曾经熟悉却已远离的过往，"
-                "嘉佳用极具时代感的语言和生动的画面感，书写了一个充满江南味道的成长故事。"
-                "离现实很远，离往事很近。作家总会从自己的经验和记忆出发来构建大厦，"
-                "也是基于此，我愿意相信这个故事的真诚与坦率，我也相信虚构背后的真实，"
-                "温柔与善良的底色。 故事里的外婆是让我印象最为深刻的人物，相较于爱情，亲情总是容易被忽略却更震撼人心的部分。"
-                "一些孤独的人拼凑起暂时的圆满，转瞬之间，永远的离别已经到来。无常与幻灭是写作者最钟爱的主题。"
-                "在一个轻描淡写的时代里，嘉佳的轻，状如云图，嘉佳的淡，有阳光的色泽与气味南方小城镇的少年时代是我曾经熟悉却已远离的过往，"
-                "嘉佳用极具时代感的语言和生动的画面感，书写了一个充满江南味道的成长故事。"
-                "离现实很远，离往事很近。作家总会从自己的经验和记忆出发来构建大厦，"
-                "也是基于此，我愿意相信这个故事的真诚与坦率，我也相信虚构背后的真实，"
-                "温柔与善良的底色。 故事里的外婆是让我印象最为深刻的人物，相较于爱情，亲情总是容易被忽略却更震撼人心的部分。"
-                "一些孤独的人拼凑起暂时的圆满，转瞬之间，永远的离别已经到来。无常与幻灭是写作者最钟爱的主题。"
-                "在一个轻描淡写的时代里，嘉佳的轻，状如云图，嘉佳的淡，有阳光的色泽与气味南方小城镇的少年时代是我曾经熟悉却已远离的过往，"
-                "嘉佳用极具时代感的语言和生动的画面感，书写了一个充满江南味道的成长故事。"
-                "离现实很远，离往事很近。作家总会从自己的经验和记忆出发来构建大厦，"
-                "也是基于此，我愿意相信这个故事的真诚与坦率，我也相信虚构背后的真实，"
-                "温柔与善良的底色。 故事里的外婆是让我印象最为深刻的人物，相较于爱情，亲情总是容易被忽略却更震撼人心的部分。"
-                "一些孤独的人拼凑起暂时的圆满，转瞬之间，永远的离别已经到来。无常与幻灭是写作者最钟爱的主题。"
-                "在一个轻描淡写的时代里，嘉佳的轻，状如云图，嘉佳的淡，有阳光的色泽与气味南方小城镇的少年时代是我曾经熟悉却已远离的过往，"
-                "嘉佳用极具时代感的语言和生动的画面感，书写了一个充满江南味道的成长故事。"
-                "离现实很远，离往事很近。作家总会从自己的经验和记忆出发来构建大厦，"
-                "也是基于此，我愿意相信这个故事的真诚与坦率，我也相信虚构背后的真实，"
-                "温柔与善良的底色。 故事里的外婆是让我印象最为深刻的人物，相较于爱情，亲情总是容易被忽略却更震撼人心的部分。"
-                "一些孤独的人拼凑起暂时的圆满，转瞬之间，永远的离别已经到来。无常与幻灭是写作者最钟爱的主题。"
-                "在一个轻描淡写的时代里，嘉佳的轻，状如云图，嘉佳的淡，有阳光的色泽与气味南方小城镇的少年时代是我曾经熟悉却已远离的过往，"
-                "嘉佳用极具时代感的语言和生动的画面感，书写了一个充满江南味道的成长故事。"
-                "离现实很远，离往事很近。作家总会从自己的经验和记忆出发来构建大厦，"
-                "也是基于此，我愿意相信这个故事的真诚与坦率，我也相信虚构背后的真实，"
-                "温柔与善良的底色。 故事里的外婆是让我印象最为深刻的人物，相较于爱情，亲情总是容易被忽略却更震撼人心的部分。"
-                "一些孤独的人拼凑起暂时的圆满，转瞬之间，永远的离别已经到来。无常与幻灭是写作者最钟爱的主题。"
-                "在一个轻描淡写的时代里，嘉佳的轻，状如云图，嘉佳的淡，有阳光的色泽与气味南方小城镇的少年时代是我曾经熟悉却已远离的过往，"
-                "嘉佳用极具时代感的语言和生动的画面感，书写了一个充满江南味道的成长故事。"
-                "离现实很远，离往事很近。作家总会从自己的经验和记忆出发来构建大厦，"
-                "也是基于此，我愿意相信这个故事的真诚与坦率，我也相信虚构背后的真实，"
-                "温柔与善良的底色。 故事里的外婆是让我印象最为深刻的人物，相较于爱情，亲情总是容易被忽略却更震撼人心的部分。"
-                "一些孤独的人拼凑起暂时的圆满，转瞬之间，永远的离别已经到来。无常与幻灭是写作者最钟爱的主题。"
-                "在一个轻描淡写的时代里，嘉佳的轻，状如云图，嘉佳的淡，有阳光的色泽与气味"),
-          ),
-          /*ListView.builder(
+          ListView.builder(
               itemCount: tempData.length,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -214,7 +175,7 @@ class _HomeState extends BaseState<HomePage, HomeViewModel> {
                     )
                   ],
                 );
-              }),*/
+              }),
           Responsive.isMobileDevice ? buildFooter() : const SizedBox(),
         ],
       ),
@@ -227,16 +188,23 @@ class _HomeState extends BaseState<HomePage, HomeViewModel> {
       alignment: WrapAlignment.center,
       direction: Responsive.isMobileDevice ? Axis.vertical : Axis.horizontal,
       children: [
-        Text('Copyright © 2022 ${S().title}'),
-        TextButton(
-            onPressed: () async {
+        FittedBox(
+          child: Text('Copyright © 2022 ${S().title}'),
+        ),
+        FittedBox(
+          child: Listener(
+            child: const Text('粤ICP备2021107512号'),
+            onPointerDown: (PointerEvent event) async {
               var _url = "https://beian.miit.gov.cn/";
               if (!await launch(_url)) {
                 throw 'Could not launch $_url';
               }
             },
-            child: const Text('粤ICP备2021107512号')),
-        Text('Designed by ${S().title}'),
+          ),
+        ),
+        FittedBox(
+          child: Text('Designed by ${S().title}'),
+        ),
       ],
     );
   }
