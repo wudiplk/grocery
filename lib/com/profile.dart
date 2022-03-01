@@ -4,6 +4,7 @@ part 'profile.g.dart';
 
 @JsonSerializable()
 class Profile {
+
   Profile();
 
   int theme = 0;

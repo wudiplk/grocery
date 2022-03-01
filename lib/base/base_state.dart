@@ -35,7 +35,8 @@ abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel>
 }
 
 abstract class BaseStateInterface {
+  /// 构建结束
   void onBuildFinish();
-
+  /// 构建开始
   void onBuildStart();
 }

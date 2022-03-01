@@ -21,7 +21,7 @@ class GoodMain extends StatelessWidget {
         title: Text(Env.envConfig.appDomain),
       ),
       body: const GoodPage(),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton:  FloatingActionButton(
         onPressed: () {
           Navigator.pop(context, "我是返回值");
         },

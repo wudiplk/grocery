@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:grocery/main/good/good_page.dart';
-
 import 'com/global.dart';
 import 'com/injection/injection.dart';
 import 'generated/l10n.dart';
@@ -12,13 +11,17 @@ void main() {
   configureDependencies();
   // Global.init().then((value) => runApp(const MyApp()));
   runApp(const MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
+
   const MyApp({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('main');
     return MaterialApp(
       title: S().title,
       theme: ThemeData(

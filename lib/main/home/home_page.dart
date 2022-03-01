@@ -4,11 +4,11 @@ import 'package:grocery/base/base_stateful_widget.dart';
 import 'package:grocery/generated/l10n.dart';
 import 'package:grocery/main/home/home_app_bar.dart';
 import 'package:grocery/widget/responsive.dart';
-import 'package:grocery/widget/rive_system.dart';
 import 'package:grocery/widget/temp_data.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import 'home_drawer.dart';
 import 'home_view_model.dart';
 
@@ -31,7 +31,6 @@ class _HomeState extends BaseState<HomePage, HomeViewModel> {
   // 是否显示“返回到顶部”按钮
   bool showToTopBtn = false;
 
-  bool isPauseAnime = false;
 
   @override
   Widget build(BuildContext context) {
@@ -45,16 +44,65 @@ class _HomeState extends BaseState<HomePage, HomeViewModel> {
         onDrawerChanged: (bool isOpened) {
           debugPrint('isOpened $isOpened');
         },
-        floatingActionButton: FloatingActionButton(
-          tooltip: 'Increment',
-          onPressed: () async {
-            index++;
-            viewModel.getDept();
-            var result =
-                await Navigator.pushNamed(context, "GoodMain", arguments: "hi");
-            debugPrint("路由返回值: $result");
-          },
-          child: const Icon(Icons.refresh),
+        floatingActionButton: Stack(
+          fit: StackFit.expand,
+          children: [
+            Positioned(
+              right: 0,
+              bottom: 144,
+              child: FloatingActionButton(
+                tooltip: '回到顶部',
+                heroTag: 'up',
+                onPressed: () {
+                  AnimationController animationController = AnimationController(
+                      vsync:this, duration: const Duration(seconds: 3));
+                  Animation<double> animation = Tween(
+                      begin: _scrollController.offset, end: 0.0)
+                      .animate(animationController)
+                    ..addListener(() {
+
+                    });
+                  _scrollController.jumpTo(animation.value);
+                  animationController.forward();
+                },
+                child: const Icon(
+                  Icons.navigation,
+                ),
+              ),
+            ),
+            Positioned(
+              right: 0,
+              bottom: 72,
+              child: FloatingActionButton(
+                tooltip: '下一页',
+                heroTag: 'next',
+                onPressed: () async {
+                  index++;
+                  // viewModel.getDept();
+                  var result = await Navigator.pushNamed(context, "GoodMain",
+                      arguments: "hi");
+                  debugPrint("路由返回值: $result");
+                },
+                child: const Icon(
+                  Icons.home,
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: FloatingActionButton(
+                tooltip: "天气",
+                heroTag: 'weather',
+                onPressed: () {
+                  /* Do something */
+                },
+                child: const Icon(
+                  Icons.nights_stay,
+                ),
+              ),
+            ),
+          ],
         ),
         drawer: Responsive.isSmallScreen(context)
             ? const Drawer(child: HomeDrawer())
@@ -74,13 +122,11 @@ class _HomeState extends BaseState<HomePage, HomeViewModel> {
     _scrollController.addListener(() {
       if (Responsive.isMediumScreen(context)) {
         if (_scrollController.offset > 260) {
-          isPauseAnime=true;
-          viewModel.pauseAnim();
+          // TODO
         }
       } else {
         if (_scrollController.offset > 360) {
-          isPauseAnime=true;
-          viewModel.pauseAnim();
+          // TODO
         }
       }
     });
@@ -88,15 +134,13 @@ class _HomeState extends BaseState<HomePage, HomeViewModel> {
 
   Widget buildBody(MediaQueryData queryData) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.max,
       children: [
         Responsive.isSmallScreen(context)
             ? const SizedBox()
             : const HomeDrawer(),
         Expanded(
-          child: Flex(
-            direction: Axis.vertical,
+          child: Column(
             children: [
               Expanded(
                 child: buildContent(),
@@ -105,9 +149,9 @@ class _HomeState extends BaseState<HomePage, HomeViewModel> {
               Responsive.isMobileDevice
                   ? const SizedBox()
                   : Expanded(
-                      child: buildFooter(),
-                      flex: 0,
-                    ),
+                child: buildFooter(),
+                flex: 0,
+              ),
             ],
           ),
         ),
@@ -124,7 +168,10 @@ class _HomeState extends BaseState<HomePage, HomeViewModel> {
             children: [
               SizedBox(
                 width: double.infinity,
-                child:  const RiveSystem(),
+                child: const RiveAnimation.asset(
+                  'anim/rope.riv',
+                  fit: BoxFit.cover,
+                ),
                 height: Responsive.isSmallScreen(context) ? 260 : 360,
               ),
               const HomeAppBar(),
@@ -142,9 +189,13 @@ class _HomeState extends BaseState<HomePage, HomeViewModel> {
                       padding: const EdgeInsets.only(top: 18, bottom: 18),
                       child: TextButton.icon(
                           onPressed: () {},
-                          icon: Icon(tempData.elementAt(index).iconData),
+                          icon: Icon(tempData
+                              .elementAt(index)
+                              .iconData),
                           label: Text(
-                            tempData.elementAt(index).title,
+                            tempData
+                                .elementAt(index)
+                                .title,
                             style: TextStyles.h3,
                           )),
                     ),

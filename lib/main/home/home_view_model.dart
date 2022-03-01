@@ -15,7 +15,9 @@ class HomeViewModel extends BaseViewModel<HomeModel> {
     notifyListeners();
   }
 
-  void pauseAnim() {
+
+  void updateAnim(bool bool) {
+    model.isPause = bool;
     notifyListeners();
   }
 }

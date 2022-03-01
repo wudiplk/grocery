@@ -6,7 +6,9 @@ import 'package:injectable/injectable.dart';
 /// injectable注解框架，用于注册getIt，使其能够方便调用
 @injectable
 class HomeModel {
+
   late bool isPause = false;
+
   late List<DeptEntity> list = [];
 
   HomeModel();

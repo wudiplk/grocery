@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:grocery/com/global.dart';
 import 'package:grocery/widget/responsive.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
