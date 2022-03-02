@@ -11,12 +11,12 @@ abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel>
 
   @override
   void initState() {
+    super.initState();
     isBuildFinish = false;
     // 获取Widget加载状态
     WidgetsBinding? widgetsBinding = WidgetsBinding.instance;
     widgetsBinding!.addPostFrameCallback((timeStamp) {
       isBuildFinish = true;
-      onBuildFinish();
     });
     // 获取ViewModel实例
     viewModel = getIt.get<VM>();
@@ -31,6 +31,11 @@ abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel>
   @override
   Widget build(BuildContext context) {
     return build(context);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
 

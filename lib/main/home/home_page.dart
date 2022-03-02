@@ -1,8 +1,11 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery/base/base_state.dart';
 import 'package:grocery/base/base_stateful_widget.dart';
 import 'package:grocery/generated/l10n.dart';
+import 'package:grocery/main/home/HomeSubTitle.dart';
 import 'package:grocery/main/home/home_app_bar.dart';
+import 'package:grocery/main/home/home_item.dart';
 import 'package:grocery/widget/responsive.dart';
 import 'package:grocery/widget/temp_data.dart';
 import 'package:provider/provider.dart';
@@ -21,26 +24,46 @@ class HomePage extends BaseStatefulWidget {
   }
 }
 
-class _HomeState extends BaseState<HomePage, HomeViewModel> {
-  late int index = 0;
+class _HomeState extends BaseState<HomePage, HomeViewModel>
+    with SingleTickerProviderStateMixin {
+  int _menuPosition = 0;
 
-  late MediaQueryData queryData;
+  bool _scrollToTop = false;
+
+  late MediaQueryData _queryData;
 
   final ScrollController _scrollController = ScrollController();
 
-  // 是否显示“返回到顶部”按钮
-  bool showToTopBtn = false;
-
+  @override
+  void initState() {
+    super.initState();
+    // 添加滚动监听
+    _scrollController.addListener(() {
+      if (_scrollToTop) {
+        if (_scrollController.offset == 0) {
+          setState(() {
+            _scrollToTop = false;
+          });
+        }
+      } else {
+        if (_scrollController.offset > 0) {
+          setState(() {
+            _scrollToTop = true;
+          });
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    queryData = MediaQuery.of(context);
+    _queryData = MediaQuery.of(context);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: viewModel),
       ],
       child: Scaffold(
-        body: buildBody(queryData),
+        body: buildBody(_queryData),
         onDrawerChanged: (bool isOpened) {
           debugPrint('isOpened $isOpened');
         },
@@ -50,23 +73,20 @@ class _HomeState extends BaseState<HomePage, HomeViewModel> {
             Positioned(
               right: 0,
               bottom: 144,
-              child: FloatingActionButton(
-                tooltip: '回到顶部',
-                heroTag: 'up',
-                onPressed: () {
-                  AnimationController animationController = AnimationController(
-                      vsync:this, duration: const Duration(seconds: 3));
-                  Animation<double> animation = Tween(
-                      begin: _scrollController.offset, end: 0.0)
-                      .animate(animationController)
-                    ..addListener(() {
-
-                    });
-                  _scrollController.jumpTo(animation.value);
-                  animationController.forward();
-                },
-                child: const Icon(
-                  Icons.navigation,
+              child: Visibility(
+                visible: _scrollToTop,
+                maintainState: false,
+                child: FloatingActionButton(
+                  tooltip: '回到顶部',
+                  heroTag: 'up',
+                  onPressed: () {
+                    _scrollController.animateTo(0,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.decelerate);
+                  },
+                  child: const Icon(
+                    Icons.navigation,
+                  ),
                 ),
               ),
             ),
@@ -77,7 +97,7 @@ class _HomeState extends BaseState<HomePage, HomeViewModel> {
                 tooltip: '下一页',
                 heroTag: 'next',
                 onPressed: () async {
-                  index++;
+                  _menuPosition++;
                   // viewModel.getDept();
                   var result = await Navigator.pushNamed(context, "GoodMain",
                       arguments: "hi");
@@ -112,26 +132,6 @@ class _HomeState extends BaseState<HomePage, HomeViewModel> {
     );
   }
 
-  @override
-  void onBuildFinish() {
-    // TODO: implement onBuildFinish
-  }
-
-  @override
-  void onBuildStart() {
-    _scrollController.addListener(() {
-      if (Responsive.isMediumScreen(context)) {
-        if (_scrollController.offset > 260) {
-          // TODO
-        }
-      } else {
-        if (_scrollController.offset > 360) {
-          // TODO
-        }
-      }
-    });
-  }
-
   Widget buildBody(MediaQueryData queryData) {
     return Row(
       mainAxisSize: MainAxisSize.max,
@@ -149,9 +149,9 @@ class _HomeState extends BaseState<HomePage, HomeViewModel> {
               Responsive.isMobileDevice
                   ? const SizedBox()
                   : Expanded(
-                child: buildFooter(),
-                flex: 0,
-              ),
+                      child: buildFooter(),
+                      flex: 0,
+                    ),
             ],
           ),
         ),
@@ -177,56 +177,16 @@ class _HomeState extends BaseState<HomePage, HomeViewModel> {
               const HomeAppBar(),
             ],
           ),
-          ListView.builder(
-              itemCount: tempData.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (BuildContext buildContext, int index) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 18, bottom: 18),
-                      child: TextButton.icon(
-                          onPressed: () {},
-                          icon: Icon(tempData
-                              .elementAt(index)
-                              .iconData),
-                          label: Text(
-                            tempData
-                                .elementAt(index)
-                                .title,
-                            style: TextStyles.h3,
-                          )),
-                    ),
-                    Wrap(
-                      direction: Axis.horizontal,
-                      spacing: 8.0,
-                      runSpacing: 4.0,
-                      alignment: WrapAlignment.start,
-                      children: List<ClipRRect>.generate(11, (index) {
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Container(
-                            height: 36,
-                            width: 160,
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Icon(Icons.ac_unit),
-                                Text("百度"),
-                                Icon(Icons.keyboard_arrow_right)
-                              ],
-                            ),
-                          ),
-                        );
-                      }),
-                    )
-                  ],
-                );
-              }),
+          Padding(
+            padding: const EdgeInsets.only(
+                left: Insets.padding_8, right: Insets.padding_8),
+            child: ListView.builder(
+                itemCount: tempData.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (BuildContext context, int position) =>
+                    buildItem(context, position)),
+          ),
           Responsive.isMobileDevice ? buildFooter() : const SizedBox(),
         ],
       ),
@@ -258,5 +218,49 @@ class _HomeState extends BaseState<HomePage, HomeViewModel> {
         ),
       ],
     );
+  }
+
+  Widget buildItem(BuildContext buildContext, int position) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 18, bottom: 18),
+          child: TextButton.icon(
+              onPressed: () {},
+              icon: Icon(tempData.elementAt(position).iconData),
+              label: Text(
+                tempData.elementAt(position).title,
+                style: TextStyles.h3,
+              )),
+        ),
+        const HomeSubTitle(),
+        Wrap(
+          direction: Axis.horizontal,
+          spacing: 16.0,
+          runSpacing: 6,
+          alignment: WrapAlignment.start,
+          children: List<HomeItem>.generate(11, (itemPosition) {
+            return const HomeItem();
+          }),
+        )
+      ],
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+  }
+
+  @override
+  void onBuildStart() {
+    // TODO: implement onBuildStart
+  }
+
+  @override
+  void onBuildFinish() {
+    // TODO: implement
   }
 }
