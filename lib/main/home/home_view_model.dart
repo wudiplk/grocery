@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:grocery/base/base_view_model.dart';
 import 'package:injectable/injectable.dart';
 
@@ -16,8 +17,4 @@ class HomeViewModel extends BaseViewModel<HomeModel> {
   }
 
 
-  void updateAnim(bool bool) {
-    model.isPause = bool;
-    notifyListeners();
-  }
 }

@@ -73,7 +73,9 @@ class Insets {
 
 
   static const double padding_8 = 8;
+  static const double padding_12 = 12;
   static const double padding_16 = 16;
+  static const double padding_18 = 18;
   static const double padding_20 = 20;
   static const double padding_24 = 24;
   static const double padding_40 = 40;

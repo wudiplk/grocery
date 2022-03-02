@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:grocery/base/base_state.dart';
 import 'package:grocery/base/base_stateful_widget.dart';
 import 'package:grocery/generated/l10n.dart';
-import 'package:grocery/main/home/HomeSubTitle.dart';
+import 'package:grocery/main/home/home_sub_title.dart';
 import 'package:grocery/main/home/home_app_bar.dart';
 import 'package:grocery/main/home/home_item.dart';
 import 'package:grocery/widget/responsive.dart';
