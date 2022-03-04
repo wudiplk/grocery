@@ -1,17 +1,15 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery/base/base_state.dart';
 import 'package:grocery/base/base_stateful_widget.dart';
 import 'package:grocery/generated/l10n.dart';
-import 'package:grocery/main/home/home_sub_title.dart';
 import 'package:grocery/main/home/home_app_bar.dart';
 import 'package:grocery/main/home/home_item.dart';
+import 'package:grocery/main/home/home_sub_title.dart';
 import 'package:grocery/widget/responsive.dart';
 import 'package:grocery/widget/temp_data.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'home_drawer.dart';
 import 'home_view_model.dart';
 
@@ -64,69 +62,13 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
       ],
       child: Scaffold(
         body: buildBody(_queryData),
-        onDrawerChanged: (bool isOpened) {
-          debugPrint('isOpened $isOpened');
-        },
-        floatingActionButton: Stack(
-          fit: StackFit.expand,
-          children: [
-            Positioned(
-              right: 0,
-              bottom: 144,
-              child: Visibility(
-                visible: _scrollToTop,
-                maintainState: false,
-                child: FloatingActionButton(
-                  tooltip: '回到顶部',
-                  heroTag: 'up',
-                  onPressed: () {
-                    _scrollController.animateTo(0,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.decelerate);
-                  },
-                  child: const Icon(
-                    Icons.navigation,
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              right: 0,
-              bottom: 72,
-              child: FloatingActionButton(
-                tooltip: '下一页',
-                heroTag: 'next',
-                onPressed: () async {
-                  _menuPosition++;
-                  // viewModel.getDept();
-                  var result = await Navigator.pushNamed(context, "GoodMain",
-                      arguments: "hi");
-                  debugPrint("路由返回值: $result");
-                },
-                child: const Icon(
-                  Icons.home,
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: FloatingActionButton(
-                tooltip: "天气",
-                heroTag: 'weather',
-                onPressed: () {
-                  /* Do something */
-                },
-                child: const Icon(
-                  Icons.nights_stay,
-                ),
-              ),
-            ),
-          ],
-        ),
+        floatingActionButton: buildFloatingAction(),
         drawer: Responsive.isSmallScreen(context)
-            ? const Drawer(child: HomeDrawer())
-            : Container(),
+            ? const SizedBox(
+                width: Insets.width_230,
+                child: Drawer(child: HomeDrawer()),
+              )
+            : const SizedBox(),
         // This trailing comma makes auto-formatting nicer for build methods.
       ),
     );
@@ -138,22 +80,14 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
       children: [
         Responsive.isSmallScreen(context)
             ? const SizedBox()
-            : const HomeDrawer(),
-        Expanded(
-          child: Column(
-            children: [
-              Expanded(
-                child: buildContent(),
-                flex: 3,
+            : SizedBox(
+                width: Responsive.isMediumScreen(context)
+                    ? Insets.width_58
+                    : Insets.width_230,
+                child: const HomeDrawer(),
               ),
-              Responsive.isMobileDevice
-                  ? const SizedBox()
-                  : Expanded(
-                      child: buildFooter(),
-                      flex: 0,
-                    ),
-            ],
-          ),
+        Expanded(
+          child: buildContent(),
         ),
       ],
     );
@@ -177,9 +111,10 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
               const HomeAppBar(),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-                left: Insets.padding_8, right: Insets.padding_8),
+          Container(
+            color: Colors.yellow,
+            padding:
+                const EdgeInsets.only(left: Insets.px_8, right: Insets.px_8),
             child: ListView.builder(
                 itemCount: tempData.length,
                 shrinkWrap: true,
@@ -187,36 +122,41 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
                 itemBuilder: (BuildContext context, int position) =>
                     buildItem(context, position)),
           ),
-          Responsive.isMobileDevice ? buildFooter() : const SizedBox(),
+          buildFooter(),
         ],
       ),
     );
   }
 
   Widget buildFooter() {
-    return Wrap(
-      crossAxisAlignment: WrapCrossAlignment.center,
-      alignment: WrapAlignment.center,
-      direction: Responsive.isMobileDevice ? Axis.vertical : Axis.horizontal,
-      children: [
-        FittedBox(
-          child: Text('Copyright © 2022 ${S().title}'),
-        ),
-        FittedBox(
-          child: Listener(
-            child: const Text('粤ICP备2021107512号'),
-            onPointerDown: (PointerEvent event) async {
-              var _url = "https://beian.miit.gov.cn/";
-              if (!await launch(_url)) {
-                throw 'Could not launch $_url';
-              }
-            },
+    return Container(
+      margin: const EdgeInsets.all(Insets.px_8),
+      alignment: Responsive.isSmallScreen(context)?Alignment.center:Alignment.centerLeft,
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        direction:
+            Responsive.isSmallScreen(context) ? Axis.vertical : Axis.horizontal,
+        children: [
+          FittedBox(
+            child: Text('Copyright © 2022 ${S().title}',style: TextStyles.footer),
           ),
-        ),
-        FittedBox(
-          child: Text('Designed by ${S().title}'),
-        ),
-      ],
+          FittedBox(
+            child: Listener(
+              child:  Text(' 粤ICP备2021107512号',style: TextStyles.footer),
+              onPointerDown: (PointerEvent event) async {
+                var _url = "https://beian.miit.gov.cn/";
+                if (!await launch(_url)) {
+                  throw 'Could not launch $_url';
+                }
+              },
+            ),
+          ),
+          FittedBox(
+            child: Text(' Designed by ${S().title}',style: TextStyles.footer),
+          ),
+        ],
+      ),
     );
   }
 
@@ -225,7 +165,7 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 18, bottom: 18),
+          padding: const EdgeInsets.symmetric(vertical: Insets.px_18),
           child: TextButton.icon(
               onPressed: () {},
               icon: Icon(tempData.elementAt(position).iconData),
@@ -262,5 +202,65 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
   @override
   void onBuildFinish() {
     // TODO: implement
+  }
+
+  Widget buildFloatingAction() {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Positioned(
+          right: 0,
+          bottom: 144,
+          child: Visibility(
+            visible: _scrollToTop,
+            maintainState: false,
+            child: FloatingActionButton(
+              tooltip: '回到顶部',
+              heroTag: 'up',
+              onPressed: () {
+                _scrollController.animateTo(0,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.decelerate);
+              },
+              child: const Icon(
+                Icons.navigation,
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          right: 0,
+          bottom: 72,
+          child: FloatingActionButton(
+            tooltip: '下一页',
+            heroTag: 'next',
+            onPressed: () async {
+              _menuPosition++;
+              // viewModel.getDept();
+              var result = await Navigator.pushNamed(context, "GoodMain",
+                  arguments: "hi");
+              debugPrint("路由返回值: $result");
+            },
+            child: const Icon(
+              Icons.home,
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          right: 0,
+          child: FloatingActionButton(
+            tooltip: "天气",
+            heroTag: 'weather',
+            onPressed: () {
+              /* Do something */
+            },
+            child: const Icon(
+              Icons.nights_stay,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

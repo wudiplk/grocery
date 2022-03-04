@@ -7,10 +7,11 @@ import '../com/global.dart';
 
 class Responsive {
   /// function responsible for providing value according to screen size
-  getResponsiveValue({dynamic forShortScreen,
-    dynamic forMediumScreen,
-    dynamic forLargeScreen,
-    required BuildContext context}) {
+  getResponsiveValue(
+      {dynamic forShortScreen,
+      dynamic forMediumScreen,
+      dynamic forLargeScreen,
+      required BuildContext context}) {
     if (isLargeScreen(context)) {
       return forLargeScreen;
     } else if (isMediumScreen(context)) {
@@ -23,9 +24,7 @@ class Responsive {
   }
 
   isLandScapeMode(BuildContext context) {
-    if (MediaQuery
-        .of(context)
-        .orientation == Orientation.landscape) {
+    if (MediaQuery.of(context).orientation == Orientation.landscape) {
       return true;
     } else {
       return false;
@@ -45,10 +44,7 @@ class Responsive {
   }
 
   static double getWidth(BuildContext context) {
-    return MediaQuery
-        .of(context)
-        .size
-        .width;
+    return MediaQuery.of(context).size.width;
   }
 
   static bool get isMobileDevice =>
@@ -63,22 +59,25 @@ class Responsive {
 }
 
 class Insets {
-  static const double xSmall = 3;
-  static const double small = 4;
-  static const double medium = 5;
-  static const double large = 20;
-  static const double extraLarge = 30;
+  static const double px_2 = 2;
+  static const double px_4 = 4;
+  static const double px_6 = 6;
+  static const double px_8 = 8;
+  static const double px_12 = 12;
+  static const double px_16 = 16;
+  static const double px_18 = 18;
+  static const double px_24 = 24;
+  static const double px_32 = 32;
+  static const double px_36 = 36;
+  static const double px_40 = 40;
+  static const double px_42 = 42;
+  static const double px_48 = 48;
+  static const double px_64 = 64;
+  static const double px_58 = 58;
 
-  static const double superLarge = 58;
-
-
-  static const double padding_8 = 8;
-  static const double padding_12 = 12;
-  static const double padding_16 = 16;
-  static const double padding_18 = 18;
-  static const double padding_20 = 20;
-  static const double padding_24 = 24;
-  static const double padding_40 = 40;
+  static const double width_58 = 58;
+  static const double width_230 = 230;
+  static const double width_300 = 300;
 }
 
 class Fonts {
@@ -93,7 +92,7 @@ class TextStyles {
   static TextStyle buttonText1 = TextStyle(
       fontWeight: FontWeight.bold, fontSize: 14, color: Global.themeColor);
   static TextStyle buttonText2 =
-  const TextStyle(fontWeight: FontWeight.normal, fontSize: 11);
+      const TextStyle(fontWeight: FontWeight.normal, fontSize: 11);
   static TextStyle h1 = TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: 20,
@@ -106,6 +105,9 @@ class TextStyles {
     fontSize: 18,
     color: Global.themeColor,
   );
+  static TextStyle footer = const TextStyle(
+    fontSize: 12,
+    color: Colors.black,
+  );
   static late TextStyle body1 = raleWay.copyWith(color: Global.themeColor);
-
 }

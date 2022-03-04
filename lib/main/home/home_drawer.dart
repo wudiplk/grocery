@@ -3,6 +3,7 @@ import 'package:grocery/generated/l10n.dart';
 import 'package:grocery/main/home/home_expansion_panel_list.dart';
 import 'package:grocery/widget/responsive.dart';
 import 'package:grocery/widget/temp_data.dart';
+
 import '../../com/global.dart';
 
 /// 侧滑栏
@@ -17,28 +18,16 @@ class HomeDrawer extends StatefulWidget {
 }
 
 class _HomeDrawerState extends State<HomeDrawer> {
-  double _defaultWidth = 200;
-
   int isExpandedIndex = 0;
 
   Item? isExpandedItem;
 
   @override
   Widget build(BuildContext context) {
-    if (Responsive.isSmallScreen(context)) {
-      _defaultWidth = 300;
-    } else if (Responsive.isMediumScreen(context)) {
-      _defaultWidth = Insets.superLarge;
-    } else {
-      _defaultWidth = 200;
-    }
     return SafeArea(
-      child: SizedBox(
-        width: _defaultWidth,
-        child: Responsive.isMediumScreen(context)
-            ? _buildMediumMenu()
-            : _buildLargeMenu(),
-      ),
+      child: Responsive.isMediumScreen(context)
+          ? _buildMediumMenu()
+          : _buildLargeMenu(),
       top: true,
     );
   }
@@ -52,13 +41,13 @@ class _HomeDrawerState extends State<HomeDrawer> {
             children: [
               Container(
                 color: Colors.white,
-                width: _defaultWidth,
-                height: 58,
+                width: Insets.width_230,
+                height: Insets.width_58,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Icon(Icons.pets,
-                        size: Insets.extraLarge, color: Global.themeColor),
+                        size: Insets.px_32, color: Global.themeColor),
                     Text(
                       S().title,
                       maxLines: 1,
@@ -70,8 +59,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                 ),
               ),
               SizedBox(
-                width: _defaultWidth,
-                height: (tempData.length + 6) * Insets.superLarge,
+                width: Insets.width_230,
+                height: (tempData.length + 6) * Insets.width_58,
                 child: HomeExpansionPanelList(
                   expansionCallback: (int panelIndex, bool isExpanded) {
                     setState(() {
@@ -93,14 +82,16 @@ class _HomeDrawerState extends State<HomeDrawer> {
                           return Row(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(left: 18),
+                                padding:
+                                    const EdgeInsets.only(left: Insets.px_18),
                                 child: Icon(
                                   item.iconData,
                                   color: Global.themeColor,
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(left: 30),
+                                padding:
+                                    const EdgeInsets.only(left: Insets.px_32),
                                 child: Text(
                                   item.title,
                                   style: TextStyles.h2,
@@ -130,19 +121,19 @@ class _HomeDrawerState extends State<HomeDrawer> {
           child: Column(
             children: tempTips.map((tip) {
               return SizedBox(
-                height: 58,
-                width: _defaultWidth,
+                height: Insets.width_58,
+                width: Insets.width_230,
                 child: Row(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 18),
+                      padding: const EdgeInsets.only(left: Insets.px_18),
                       child: Icon(
                         tip.iconData,
                         color: Global.themeColor,
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 30),
+                      padding: const EdgeInsets.only(left: Insets.px_32),
                       child: Text(
                         tip.tip,
                         style: TextStyles.h2,
@@ -168,15 +159,14 @@ class _HomeDrawerState extends State<HomeDrawer> {
           child: Column(
             children: [
               Container(
-                height: Insets.superLarge,
-                width: Insets.superLarge,
+                height: Insets.width_58,
                 alignment: Alignment.center,
                 child: Icon(Icons.pets, color: Global.themeColor),
               ),
               Column(
                 children: tempData.map((e) {
                   return SizedBox(
-                    height: 58,
+                    height: Insets.width_58,
                     child: MouseRegion(
                       onHover: (PointerEvent pointerEvent) {},
                       child: Icon(
@@ -196,8 +186,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: tempTips.map((tip) {
               return SizedBox(
-                width: 220,
-                height: 58,
+                height: Insets.width_58,
                 child: Icon(tip.iconData, color: Global.themeColor),
               );
             }).toList(),
