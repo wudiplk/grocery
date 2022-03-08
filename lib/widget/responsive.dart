@@ -69,6 +69,7 @@ class Insets {
   static const double px_24 = 24;
   static const double px_32 = 32;
   static const double px_36 = 36;
+  static const double px_38 = 38;
   static const double px_40 = 40;
   static const double px_42 = 42;
   static const double px_48 = 48;

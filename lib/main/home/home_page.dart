@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grocery/base/base_state.dart';
 import 'package:grocery/base/base_stateful_widget.dart';
+import 'package:grocery/com/global.dart';
 import 'package:grocery/generated/l10n.dart';
 import 'package:grocery/main/home/home_app_bar.dart';
 import 'package:grocery/main/home/home_item.dart';
@@ -94,36 +95,40 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
   }
 
   Widget buildContent() {
-    return SingleChildScrollView(
-      controller: _scrollController,
-      child: Column(
-        children: [
-          Stack(
+    return Container(
+      child: SafeArea(
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          child: Column(
             children: [
-              SizedBox(
-                width: double.infinity,
-                child: const RiveAnimation.asset(
-                  'anim/rope.riv',
-                  fit: BoxFit.cover,
-                ),
-                height: Responsive.isSmallScreen(context) ? 260 : 360,
+              Stack(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: const RiveAnimation.asset(
+                      'anim/rope.riv',
+                      fit: BoxFit.cover,
+                    ),
+                    height: Responsive.isSmallScreen(context) ? 260 : 360,
+                  ),
+                  const HomeAppBar(),
+                ],
               ),
-              const HomeAppBar(),
+              Container(
+                padding:
+                const EdgeInsets.symmetric(horizontal: Insets.px_8),
+                child: ListView.builder(
+                    itemCount: tempData.length,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (BuildContext context, int position) =>
+                        buildItem(context, position)),
+              ),
+              buildFooter(),
             ],
           ),
-          Container(
-            color: Colors.yellow,
-            padding:
-                const EdgeInsets.only(left: Insets.px_8, right: Insets.px_8),
-            child: ListView.builder(
-                itemCount: tempData.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (BuildContext context, int position) =>
-                    buildItem(context, position)),
-          ),
-          buildFooter(),
-        ],
+        ),
+        top: true,
       ),
     );
   }
@@ -131,7 +136,9 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
   Widget buildFooter() {
     return Container(
       margin: const EdgeInsets.all(Insets.px_8),
-      alignment: Responsive.isSmallScreen(context)?Alignment.center:Alignment.centerLeft,
+      alignment: Responsive.isSmallScreen(context)
+          ? Alignment.center
+          : Alignment.centerLeft,
       child: Wrap(
         alignment: WrapAlignment.center,
         crossAxisAlignment: WrapCrossAlignment.center,
@@ -139,11 +146,12 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
             Responsive.isSmallScreen(context) ? Axis.vertical : Axis.horizontal,
         children: [
           FittedBox(
-            child: Text('Copyright © 2022 ${S().title}',style: TextStyles.footer),
+            child:
+                Text('Copyright © 2022 ${S().title}', style: TextStyles.footer),
           ),
           FittedBox(
             child: Listener(
-              child:  Text(' 粤ICP备2021107512号',style: TextStyles.footer),
+              child: Text(' 粤ICP备2021107512号', style: TextStyles.footer),
               onPointerDown: (PointerEvent event) async {
                 var _url = "https://beian.miit.gov.cn/";
                 if (!await launch(_url)) {
@@ -153,7 +161,7 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
             ),
           ),
           FittedBox(
-            child: Text(' Designed by ${S().title}',style: TextStyles.footer),
+            child: Text(' Designed by ${S().title}', style: TextStyles.footer),
           ),
         ],
       ),

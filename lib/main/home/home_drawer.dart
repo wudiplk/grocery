@@ -91,7 +91,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                               ),
                               Padding(
                                 padding:
-                                    const EdgeInsets.only(left: Insets.px_32),
+                                    const EdgeInsets.only(left: Insets.px_38),
                                 child: Text(
                                   item.title,
                                   style: TextStyles.h2,
@@ -133,7 +133,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: Insets.px_32),
+                      padding: const EdgeInsets.only(left: Insets.px_38),
                       child: Text(
                         tip.tip,
                         style: TextStyles.h2,
