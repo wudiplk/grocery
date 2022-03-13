@@ -112,7 +112,6 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
             ],
           ),
           Container(
-            color: Colors.yellow,
             padding:
                 const EdgeInsets.only(left: Insets.px_8, right: Insets.px_8),
             child: ListView.builder(
