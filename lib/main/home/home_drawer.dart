@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grocery/generated/l10n.dart';
 import 'package:grocery/main/home/home_expansion_panel_list.dart';
+import 'package:grocery/main/home/home_menu_item_mid.dart';
 import 'package:grocery/widget/responsive.dart';
 import 'package:grocery/widget/temp_data.dart';
 
@@ -24,12 +25,14 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Responsive.isMediumScreen(context)
-          ? _buildMediumMenu()
-          : _buildLargeMenu(),
-      top: true,
-    );
+    return Responsive.isSmallScreen(context)
+        ? SafeArea(
+            child: Responsive.isMediumScreen(context)
+                ? _buildMediumMenu()
+                : _buildLargeMenu())
+        : Responsive.isMediumScreen(context)
+            ? _buildMediumMenu()
+            : _buildLargeMenu();
   }
 
   Widget _buildLargeMenu() {
@@ -135,7 +138,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     Padding(
                       padding: const EdgeInsets.only(left: Insets.px_38),
                       child: Text(
-                        tip.tip,
+                        tip.title,
                         style: TextStyles.h2,
                       ),
                     ),
@@ -160,21 +163,13 @@ class _HomeDrawerState extends State<HomeDrawer> {
             children: [
               Container(
                 height: Insets.width_58,
+                width: Insets.width_58,
                 alignment: Alignment.center,
                 child: Icon(Icons.pets, color: Global.themeColor),
               ),
               Column(
                 children: tempData.map((e) {
-                  return SizedBox(
-                    height: Insets.width_58,
-                    child: MouseRegion(
-                      onHover: (PointerEvent pointerEvent) {},
-                      child: Icon(
-                        e.iconData,
-                        color: Global.themeColor,
-                      ),
-                    ),
-                  );
+                  return HomeMenuItemMid(item: e);
                 }).toList(),
               )
             ],
@@ -185,10 +180,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: tempTips.map((tip) {
-              return SizedBox(
-                height: Insets.width_58,
-                child: Icon(tip.iconData, color: Global.themeColor),
-              );
+              return  HomeMenuItemMid(item: tip);
             }).toList(),
           ),
         ),

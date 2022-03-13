@@ -76,59 +76,66 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
   }
 
   Widget buildBody(MediaQueryData queryData) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Responsive.isSmallScreen(context)
-            ? const SizedBox()
-            : SizedBox(
-                width: Responsive.isMediumScreen(context)
-                    ? Insets.width_58
-                    : Insets.width_230,
-                child: const HomeDrawer(),
-              ),
-        Expanded(
-          child: buildContent(),
+        Container(
+          color: Global.themeColor,
+          child:  SafeArea(
+            child: Container(
+            ),
+            top: true,
+          ),
         ),
+       Expanded(child:  Row(
+         mainAxisSize: MainAxisSize.max,
+         children: [
+           Responsive.isSmallScreen(context)
+               ? const SizedBox()
+               : SizedBox(
+             width: Responsive.isMediumScreen(context)
+                 ? Insets.width_58
+                 : Insets.width_230,
+             child: const HomeDrawer(),
+           ),
+           Expanded(
+             child: buildContent(),
+           ),
+         ],
+       ))
       ],
     );
   }
 
   Widget buildContent() {
-    return Container(
-      child: SafeArea(
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          child: Column(
+    return SingleChildScrollView(
+      controller: _scrollController,
+      child: Column(
+        children: [
+          Stack(
             children: [
-              Stack(
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: const RiveAnimation.asset(
-                      'anim/rope.riv',
-                      fit: BoxFit.cover,
-                    ),
-                    height: Responsive.isSmallScreen(context) ? 260 : 360,
-                  ),
-                  const HomeAppBar(),
-                ],
+              SizedBox(
+                width: double.infinity,
+                child: const RiveAnimation.asset(
+                  'anim/rope.riv',
+                  fit: BoxFit.cover,
+                ),
+                height: Responsive.isSmallScreen(context) ? 260 : 360,
               ),
-              Container(
-                padding:
-                const EdgeInsets.symmetric(horizontal: Insets.px_8),
-                child: ListView.builder(
-                    itemCount: tempData.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (BuildContext context, int position) =>
-                        buildItem(context, position)),
-              ),
-              buildFooter(),
+              const HomeAppBar(),
             ],
           ),
-        ),
-        top: true,
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: Insets.px_8),
+            child: ListView.builder(
+                itemCount: tempData.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (BuildContext context, int position) =>
+                    buildItem(context, position)),
+          ),
+          buildFooter(),
+        ],
       ),
     );
   }
@@ -173,7 +180,7 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: Insets.px_18),
+          padding: const EdgeInsets.symmetric(vertical: Insets.px_16),
           child: TextButton.icon(
               onPressed: () {},
               icon: Icon(tempData.elementAt(position).iconData),

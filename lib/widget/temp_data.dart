@@ -2,11 +2,23 @@ import 'package:flutter/material.dart';
 
 final List<Item> _data = generateItems(title, subTitle, icons);
 
-final List<Info> _tips = generateInfo(tips, tipIcon);
+final List<Item> _tips = generateItems(tips, [], tipIcon);
 
 List<Item> get tempData => _data;
 
-List<Info> get tempTips => _tips;
+List<Item> get tempTips => _tips;
+List<String> tips = [
+  '留言板',
+  '网站提交',
+  '友情链接',
+  '关于本站',
+];
+List<IconData> tipIcon = [
+  Icons.textsms,
+  Icons.cloud_upload,
+  Icons.link,
+  Icons.info,
+];
 
 List<String> title = [
   '酷站推荐',
@@ -67,27 +79,4 @@ List<Item> generateItems(
   });
 }
 
-List<String> tips = [
-  '留言板',
-  '网站提交',
-  '友情链接',
-  '关于本站',
-];
-List<IconData> tipIcon = [
-  Icons.textsms,
-  Icons.cloud_upload,
-  Icons.link,
-  Icons.info,
-];
 
-class Info {
-  String tip;
-  IconData iconData;
-
-  Info({required this.tip, required this.iconData});
-}
-
-List<Info> generateInfo(List<String> _tips, List<IconData> _tipIcon) {
-  return List<Info>.generate(_tips.length,
-      (index) => Info(tip: _tips[index], iconData: _tipIcon[index]));
-}

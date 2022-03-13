@@ -32,15 +32,15 @@ class Responsive {
   }
 
   static bool isLargeScreen(BuildContext context) {
-    return getWidth(context) > 1200;
+    return getWidth(context) > 1024;
   }
 
   static bool isSmallScreen(BuildContext context) {
-    return getWidth(context) < 600;
+    return getWidth(context) < 768;
   }
 
   static bool isMediumScreen(BuildContext context) {
-    return getWidth(context) > 600 && getWidth(context) < 1200;
+    return getWidth(context) > 768 && getWidth(context) < 1024;
   }
 
   static double getWidth(BuildContext context) {
