@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:grocery/main/about/about_page.dart';
+import 'package:grocery/main/comment/comment_page.dart';
+import 'package:grocery/main/detail/detail_page.dart';
 import 'package:grocery/main/good/good_page.dart';
+import 'package:grocery/main/link/link_page.dart';
+import 'package:grocery/main/submit/submit_page.dart';
+import 'package:grocery/widget/flutter_utils.dart';
 import 'com/global.dart';
 import 'com/injection/injection.dart';
 import 'generated/l10n.dart';
@@ -29,7 +35,11 @@ class MyApp extends StatelessWidget {
       builder: EasyLoading.init(),
       home: const HomePage(),
       routes: <String, WidgetBuilder>{
-        'GoodMain': (context) => const GoodMain(),
+        PageRoutes.about: (context) => const AboutPage(),
+        PageRoutes.link: (context) => const LinkPage(),
+        PageRoutes.comment: (context) => const CommentPage(),
+        PageRoutes.submit: (context) => const SubmitPage(),
+        PageRoutes.detail: (context) => const DetailPage(),
       },
       supportedLocales: S.delegate.supportedLocales,
       localizationsDelegates: const [
@@ -42,7 +52,7 @@ class MyApp extends StatelessWidget {
         String? routeName = settings.name;
         debugPrint("onGenerateRoute $routeName");
         switch (routeName) {
-          case "GoodMain":
+          case PageRoutes.about:
             return MaterialPageRoute(builder: (BuildContext context) {
               return Scaffold(
                 body: Center(

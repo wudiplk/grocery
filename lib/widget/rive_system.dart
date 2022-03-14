@@ -31,7 +31,7 @@ class _RiveSystem extends BaseState<RiveSystem, HomeViewModel> {
   void initState() {
     super.initState();
     _controller = SimpleAnimation('idle');
-    _controller.isActive =true;
+    _controller.isActive = true;
   }
 
   @override
@@ -41,7 +41,7 @@ class _RiveSystem extends BaseState<RiveSystem, HomeViewModel> {
       controllers: [_controller],
       fit: BoxFit.cover,
       onInit: (_) => setState(() {
-        _controller.isActive=true;
+        _controller.isActive = true;
       }),
     );
   }

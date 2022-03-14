@@ -1,12 +1,10 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery/base/base_state.dart';
 import 'package:grocery/base/base_stateful_widget.dart';
 import 'package:grocery/com/global.dart';
 import 'package:grocery/generated/l10n.dart';
-import 'package:grocery/main/home/home_app_bar.dart';
-import 'package:grocery/main/home/home_item.dart';
-import 'package:grocery/main/home/home_sub_title.dart';
-import 'package:grocery/widget/responsive.dart';
+import 'package:grocery/widget/flutter_utils.dart';
 import 'package:grocery/widget/temp_data.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
@@ -25,7 +23,6 @@ class HomePage extends BaseStatefulWidget {
 
 class _HomeState extends BaseState<HomePage, HomeViewModel>
     with SingleTickerProviderStateMixin {
-  int _menuPosition = 0;
 
   bool _scrollToTop = false;
 
@@ -81,28 +78,28 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
       children: [
         Container(
           color: Global.themeColor,
-          child:  SafeArea(
-            child: Container(
-            ),
+          child: SafeArea(
+            child: Container(),
             top: true,
           ),
         ),
-       Expanded(child:  Row(
-         mainAxisSize: MainAxisSize.max,
-         children: [
-           Responsive.isSmallScreen(context)
-               ? const SizedBox()
-               : SizedBox(
-             width: Responsive.isMediumScreen(context)
-                 ? Insets.width_58
-                 : Insets.width_230,
-             child: const HomeDrawer(),
-           ),
-           Expanded(
-             child: buildContent(),
-           ),
-         ],
-       ))
+        Expanded(
+            child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Responsive.isSmallScreen(context)
+                ? const SizedBox()
+                : SizedBox(
+                    width: Responsive.isMediumScreen(context)
+                        ? Insets.width_58
+                        : Insets.width_230,
+                    child: const HomeDrawer(),
+                  ),
+            Expanded(
+              child: buildContent(),
+            ),
+          ],
+        ))
       ],
     );
   }
@@ -250,9 +247,8 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
             tooltip: '下一页',
             heroTag: 'next',
             onPressed: () async {
-              _menuPosition++;
               // viewModel.getDept();
-              var result = await Navigator.pushNamed(context, "GoodMain",
+              var result = await Navigator.pushNamed(context, PageRoutes.about,
                   arguments: "hi");
               debugPrint("路由返回值: $result");
             },
@@ -275,6 +271,228 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
             ),
           ),
         ),
+      ],
+    );
+  }
+}
+
+class HomeSubTitle extends StatefulWidget {
+  const HomeSubTitle({Key? key}) : super(key: key);
+
+  @override
+  _HomeSubTitleState createState() {
+    return _HomeSubTitleState();
+  }
+}
+
+class _HomeSubTitleState extends State<HomeSubTitle> {
+  int _index = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Container(
+      margin: const EdgeInsets.only(bottom: Insets.px_12),
+      height: Insets.px_40,
+      padding: const EdgeInsets.symmetric(horizontal: Insets.px_4),
+      decoration: BoxDecoration(
+        color: Colors.grey.withOpacity(0.2),
+        borderRadius: const BorderRadius.all(Radius.circular(Insets.px_40 / 2)),
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          AnimatedPositionedDirectional(
+              start: _index * (Insets.px_64 + Insets.px_4 * 2),
+              width: Insets.px_64 + Insets.px_4 * 2,
+              height: Insets.px_32,
+              curve: Curves.easeInOutCubic,
+              child: const DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.all(Radius.circular(Insets.px_16)),
+                ),
+              ),
+              duration: const Duration(milliseconds: 250)),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: List.generate(tempData[0].subTitle.length, (index) {
+              return MouseRegion(
+                onExit: (PointerExitEvent event) {
+                  setState(() {
+                    _index = 0;
+                  });
+                },
+                onEnter: (PointerEnterEvent event) {
+                  setState(() {
+                    _index = index;
+                  });
+                },
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _index = index;
+                    });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: Insets.px_4),
+                    alignment: Alignment.center,
+                    width: Insets.px_64,
+                    height: Insets.px_32,
+                    child: Text(
+                      tempData[0].subTitle[index],
+                      style: TextStyle(
+                          color: _index == index ? Colors.white : Colors.grey),
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class HomeItem extends StatefulWidget {
+  const HomeItem({Key? key}) : super(key: key);
+
+  @override
+  _HomeItemState createState() {
+    return _HomeItemState();
+  }
+}
+
+class _HomeItemState extends State<HomeItem> {
+  bool _isHover = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return GestureDetector (
+      onTap: (){
+        Navigator.pushNamed(context, PageRoutes.detail,arguments: 'detail');
+      },
+      child: SizedBox(
+        height: 42,
+        width: 160,
+        child: AnimatedAlign(
+          alignment: _isHover ? Alignment.topCenter : Alignment.bottomCenter,
+          curve: Curves.decelerate,
+          duration: const Duration(milliseconds: 500),
+          child: Container(
+            height: 36,
+            decoration: _isHover
+                ? BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.2), blurRadius: 8)
+              ],
+              color: Colors.white,
+              borderRadius: BorderRadius.circular((8)),
+            )
+                : BoxDecoration(
+                border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8)),
+            width: 160,
+            child: MouseRegion(
+              onEnter: (PointerEnterEvent event) {
+                setState(() {
+                  _isHover = true;
+                });
+              },
+              onExit: (PointerExitEvent event) {
+                setState(() {
+                  _isHover = false;
+                });
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Icon(Icons.ac_unit),
+                  Text("百度"),
+                  Icon(Icons.keyboard_arrow_right)
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const HomeAppBar({Key? key}) : super(key: key);
+
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => const Size.fromHeight(80);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Listener(
+          onPointerDown: (PointerEvent p) {},
+          child: const SizedBox(
+            height: 58,
+            width: 58,
+            child: Icon(
+              Icons.person,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 58,
+          width: 58,
+          child: Icon(
+            Icons.search,
+            color: Colors.white,
+          ),
+        ),
+        Responsive.isSmallScreen(context)
+            ? Listener(
+                onPointerDown: (PointerEvent p) {
+                  Scaffold.of(context).openDrawer();
+                },
+                child: const SizedBox(
+                  height: 58,
+                  width: 58,
+                  child: Icon(
+                    Icons.menu,
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            : const SizedBox(),
       ],
     );
   }

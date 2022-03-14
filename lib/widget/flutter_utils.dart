@@ -112,3 +112,10 @@ class TextStyles {
   );
   static late TextStyle body1 = raleWay.copyWith(color: Global.themeColor);
 }
+class PageRoutes {
+  static const String about = 'about';
+  static const String submit  = 'submit ';
+  static const String link = 'link';
+  static const String comment = 'comment';
+  static const String detail = 'detail';
+}

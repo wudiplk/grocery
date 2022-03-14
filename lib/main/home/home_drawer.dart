@@ -1,8 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery/generated/l10n.dart';
-import 'package:grocery/main/home/home_expansion_panel_list.dart';
-import 'package:grocery/main/home/home_menu_item_mid.dart';
-import 'package:grocery/widget/responsive.dart';
+import 'package:grocery/widget/custom_expansion_list.dart';
+import 'package:grocery/widget/flutter_utils.dart';
 import 'package:grocery/widget/temp_data.dart';
 
 import '../../com/global.dart';
@@ -64,7 +64,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
               SizedBox(
                 width: Insets.width_230,
                 height: (tempData.length + 6) * Insets.width_58,
-                child: HomeExpansionPanelList(
+                child: CustomExpansionList(
                   expansionCallback: (int panelIndex, bool isExpanded) {
                     setState(() {
                       if (isExpandedIndex >= 0 &&
@@ -123,28 +123,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
         Positioned(
           child: Column(
             children: tempTips.map((tip) {
-              return SizedBox(
-                height: Insets.width_58,
-                width: Insets.width_230,
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: Insets.px_18),
-                      child: Icon(
-                        tip.iconData,
-                        color: Global.themeColor,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: Insets.px_38),
-                      child: Text(
-                        tip.title,
-                        style: TextStyles.h2,
-                      ),
-                    ),
-                  ],
-                ),
-              );
+              return HomeMenuItemLarge(item: tip);
             }).toList(),
           ),
           bottom: 0,
@@ -180,11 +159,143 @@ class _HomeDrawerState extends State<HomeDrawer> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: tempTips.map((tip) {
-              return  HomeMenuItemMid(item: tip);
+              return HomeMenuItemMid(item: tip);
             }).toList(),
           ),
         ),
       ],
+    );
+  }
+}
+
+class HomeMenuItemLarge extends StatefulWidget {
+  Item item;
+  HomeMenuItemLarge({Key? key, required this.item}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return _HomeMenuItemLargeState();
+  }
+}
+
+class _HomeMenuItemLargeState extends State<HomeMenuItemLarge> {
+  bool _isHover = false;
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return GestureDetector(
+      onTap: () {
+        switch (widget.item.title) {
+          case "关于本站":
+            Navigator.pushNamed(context, PageRoutes.about,
+                arguments: widget.item.title);
+            break;
+          case "友情链接":
+            Navigator.pushNamed(context, PageRoutes.link,
+                arguments: widget.item.title);
+            break;
+          case "网站提交":
+            Navigator.pushNamed(context, PageRoutes.submit,
+                arguments: widget.item.title);
+            break;
+          case "留言板":
+            Navigator.pushNamed(context, PageRoutes.comment,
+                arguments: widget.item.title);
+            break;
+        }
+      },
+      child: SizedBox(
+        height: Insets.width_58,
+        width: Insets.width_230,
+        child: MouseRegion(
+          onEnter: (PointerEnterEvent event) {
+            setState(() {
+              _isHover = true;
+            });
+          },
+          onExit: (PointerExitEvent event) {
+            setState(() {
+              _isHover = false;
+            });
+          },
+          child: Container(
+            margin: const EdgeInsets.all(Insets.px_6),
+            decoration: _isHover
+                ? BoxDecoration(
+                    color: Colors.grey.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(Insets.px_4))
+                : const BoxDecoration(),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: Insets.px_18),
+                  child: Icon(
+                    widget.item.iconData,
+                    color: Global.themeColor,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: Insets.px_38),
+                  child: Text(
+                    widget.item.title,
+                    style: TextStyles.h2,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class HomeMenuItemMid extends StatefulWidget {
+  Item item;
+
+  HomeMenuItemMid({Key? key, required this.item}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return _HomeMenuItemMid();
+  }
+}
+
+class _HomeMenuItemMid extends State<HomeMenuItemMid> {
+  bool _isHover = false;
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return SizedBox(
+      height: Insets.width_58,
+      width: Insets.width_58,
+      child: MouseRegion(
+        onEnter: (PointerEnterEvent event) {
+          setState(() {
+            _isHover = true;
+          });
+        },
+        onExit: (PointerExitEvent event) {
+          setState(() {
+            _isHover = false;
+          });
+        },
+        child: Container(
+          margin: const EdgeInsets.all(Insets.px_6),
+          decoration: _isHover
+              ? BoxDecoration(
+                  color: Colors.grey.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(Insets.px_4))
+              : const BoxDecoration(),
+          child: Icon(
+            widget.item.iconData,
+            color: Global.themeColor,
+          ),
+        ),
+      ),
     );
   }
 }

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import "dart:math";
 
-class HomeExpandIcon extends StatefulWidget {
+class CustomExpandIcon extends StatefulWidget {
   final bool isExpanded;
   final Color color;
   final double size;
   final ValueChanged<bool> onPressed;
   final EdgeInsetsGeometry padding;
 
-  const HomeExpandIcon(
+  const CustomExpandIcon(
       {Key? key,
       this.isExpanded = false,
       this.size = 24.0,
@@ -20,11 +20,11 @@ class HomeExpandIcon extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _HomeExpandIconState();
+    return _CustomExpandIconState();
   }
 }
 
-class _HomeExpandIconState extends State<HomeExpandIcon>
+class _CustomExpandIconState extends State<CustomExpandIcon>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _iconTurns;
@@ -51,7 +51,7 @@ class _HomeExpandIconState extends State<HomeExpandIcon>
   }
 
   @override
-  void didUpdateWidget(HomeExpandIcon oldWidget) {
+  void didUpdateWidget(CustomExpandIcon oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.isExpanded != oldWidget.isExpanded) {
       if (widget.isExpanded) {
