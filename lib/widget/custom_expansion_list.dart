@@ -39,6 +39,7 @@ class _CustomExpansionListState extends State<CustomExpansionList> {
         return Container(
           key: _SaltedKey<BuildContext, int>(context, index * 2),
           child: Material(
+            color:Colors.transparent,
             shadowColor: const Color.fromRGBO(50, 51, 70, 0),
             elevation: 2.0,
             borderOnForeground: false,

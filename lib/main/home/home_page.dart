@@ -114,15 +114,16 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
               SizedBox(
                 width: double.infinity,
                 child: const RiveAnimation.asset(
-                  'anim/rope.riv',
+                  'anim/main/loader.riv',
                   fit: BoxFit.cover,
                 ),
-                height: Responsive.isSmallScreen(context) ? 260 : 360,
+                height: Responsive.isSmallScreen(context) ? Insets.width_260 : Insets.width_360,
               ),
               const HomeAppBar(),
             ],
           ),
           Container(
+            color: Global.bgColor,
             padding: const EdgeInsets.symmetric(horizontal: Insets.px_8),
             child: ListView.builder(
                 itemCount: tempData.length,

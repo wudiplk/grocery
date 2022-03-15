@@ -37,7 +37,7 @@ class _RiveSystem extends BaseState<RiveSystem, HomeViewModel> {
   @override
   Widget build(BuildContext context) {
     return RiveAnimation.asset(
-      'anim/example.riv',
+      'anim/car.riv',
       controllers: [_controller],
       fit: BoxFit.cover,
       onInit: (_) => setState(() {

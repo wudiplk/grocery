@@ -68,11 +68,50 @@ flutter:
   uses-material-design: true
   assets:
     - images/avatar.png
+    - anim/main/fish.riv
+    - anim/main/car.riv
+    - anim/main/rope.riv
+    - anim/main/loader.riv
+    - anim/main/todo.riv
+    - anim/man.riv
+    - anim/icon/bear.riv
     - anim/bike.riv
-    - anim/fishbowl.riv
-    - anim/system.riv
-    - anim/example.riv
-    - anim/rope.riv
-    - anim/trottman.riv
+    - anim/animation.riv
+    - anim/astronauta.riv
+    - anim/efresh.riv
+    - anim/s001.riv
+    - anim/nail.riv
+    - anim/2.riv
+    - anim/welcome.riv
+    - anim/4.riv
+    - anim/5.riv
+    - anim/6.riv
+    - anim/7.riv
+    - anim/8.riv
+    - anim/9.riv
+    - anim/10.riv
+    - anim/11.riv
+    - anim/12.riv
+    - anim/13.riv
+    - anim/14.riv
+    - anim/15.riv
+    - anim/16.riv
+    - anim/17.riv
+    - anim/about/sun.riv
+    - anim/19.riv
+    - anim/20.riv
+    - anim/21.riv
+    - anim/22.riv
+    - anim/23.riv
+    - anim/24.riv
+    - anim/25.riv
+    - anim/26.riv
+    - anim/27.riv
+    - anim/28.riv
+    - anim/29.riv
+    - anim/30.riv
+    - anim/31.riv
+    - anim/32.riv
+    - anim/33.riv
 flutter_intl:
   enabled: true

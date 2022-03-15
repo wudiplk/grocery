@@ -20,6 +20,7 @@ class Global {
   static List<MaterialColor> get themes => _themes;
 
   static MaterialColor themeColor = _themes[0];
+  static Color bgColor = Colors.white;
 
   // 是否为release版
   static bool get isRelease => const bool.fromEnvironment("dart.vm.product");

@@ -79,6 +79,8 @@ class Insets {
   static const double width_58 = 58;
   static const double width_230 = 230;
   static const double width_300 = 300;
+  static const double width_260 = 260;
+  static const double width_360 = 360;
 }
 
 class Fonts {

@@ -25,14 +25,17 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    return Responsive.isSmallScreen(context)
-        ? SafeArea(
-            child: Responsive.isMediumScreen(context)
-                ? _buildMediumMenu()
-                : _buildLargeMenu())
-        : Responsive.isMediumScreen(context)
-            ? _buildMediumMenu()
-            : _buildLargeMenu();
+    return Container(
+      color: Global.bgColor,
+      child: Responsive.isSmallScreen(context)
+          ? SafeArea(
+              child: Responsive.isMediumScreen(context)
+                  ? _buildMediumMenu()
+                  : _buildLargeMenu())
+          : Responsive.isMediumScreen(context)
+              ? _buildMediumMenu()
+              : _buildLargeMenu(),
+    );
   }
 
   Widget _buildLargeMenu() {
@@ -42,8 +45,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
         Positioned(
           child: Column(
             children: [
-              Container(
-                color: Colors.white,
+              SizedBox(
                 width: Insets.width_230,
                 height: Insets.width_58,
                 child: Row(
@@ -78,7 +80,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   },
                   children: tempData.map<ExpansionPanel>((Item item) {
                     return ExpansionPanel(
-                        backgroundColor: Colors.transparent,
+                        backgroundColor: Global.bgColor,
                         canTapOnHeader: true,
                         isExpanded: item.isExpanded,
                         headerBuilder: (BuildContext context, bool isExpand) {
