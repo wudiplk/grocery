@@ -31,7 +31,6 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  cupertino_icons: ^1.0.2
   convert: ^3.0.1
   crypto: ^3.0.1
   dio: ^4.0.0
@@ -65,6 +64,12 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+#  fonts:
+#    - family: Noto
+#      fonts:
+#        - asset: fonts/NotoSansSC-Regular.otf
+#        - asset: fonts/NotoSans-Regular.ttf
+#          style: normal
   uses-material-design: true
   assets:
     - images/avatar.png
@@ -115,3 +120,4 @@ flutter:
     - anim/33.riv
 flutter_intl:
   enabled: true
+

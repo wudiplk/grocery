@@ -17,13 +17,10 @@ void main() {
   configureDependencies();
   // Global.init().then((value) => runApp(const MyApp()));
   runApp(const MyApp());
-
 }
 
 class MyApp extends StatelessWidget {
-
   const MyApp({Key? key}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +30,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Global.themes[Global.profile.theme],
       ),
       builder: EasyLoading.init(),
-      home: const SubmitPage(),
+      home: const HomePage(),
       routes: <String, WidgetBuilder>{
         PageRoutes.about: (context) => const AboutPage(),
         PageRoutes.link: (context) => const LinkPage(),
