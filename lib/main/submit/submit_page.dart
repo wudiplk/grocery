@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:grocery/main/home/home_model.dart';
 import 'package:grocery/widget/temp_data.dart';
+import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 
+import '../../base/base_state.dart';
+import '../../base/base_stateful_widget.dart';
 import '../../widget/flutter_utils.dart';
+import '../home/home_view_model.dart';
 
-class SubmitPage extends StatefulWidget {
+class SubmitPage extends BaseStatefulWidget {
   const SubmitPage({Key? key}) : super(key: key);
 
   @override
@@ -14,7 +19,7 @@ class SubmitPage extends StatefulWidget {
   }
 }
 
-class _SubmitPageState extends State<SubmitPage> {
+class _SubmitPageState extends BaseState<SubmitPage, HomeViewModel> {
   late TextEditingController _nameController;
   late TextEditingController _urlController;
   late TextEditingController _describeController;
@@ -61,70 +66,75 @@ class _SubmitPageState extends State<SubmitPage> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: const RiveAnimation.asset(
-                'anim/about/sun.riv',
-                fit: BoxFit.cover,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: viewModel),
+      ],
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: const RiveAnimation.asset(
+                  'anim/about/sun.riv',
+                  fit: BoxFit.cover,
+                ),
+                height: Responsive.isSmallScreen(context)
+                    ? Insets.width_260
+                    : Insets.width_360,
               ),
-              height: Responsive.isSmallScreen(context)
-                  ? Insets.width_260
-                  : Insets.width_360,
-            ),
-            Row(
-              children: [
-                Flexible(
-                  child: Container(),
-                  fit: FlexFit.tight,
-                  flex: 1,
-                ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        child: Text(
-                          '${ModalRoute.of(context)?.settings.arguments}',
-                          style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 36,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        margin: const EdgeInsets.only(top: Insets.px_38),
-                      ),
-                      buildContent()
-                    ],
+              Row(
+                children: [
+                  Flexible(
+                    child: Container(),
+                    fit: FlexFit.tight,
+                    flex: 1,
                   ),
-                  flex: 3,
-                ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Container(),
-                  flex: 1,
-                ),
-              ],
-            )
-          ],
+                  Flexible(
+                    fit: FlexFit.tight,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Text(
+                            '${ModalRoute.of(context)?.settings.arguments}',
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 36,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          margin: const EdgeInsets.only(top: Insets.px_38),
+                        ),
+                        buildContent(context)
+                      ],
+                    ),
+                    flex: 3,
+                  ),
+                  Flexible(
+                    fit: FlexFit.tight,
+                    child: Container(),
+                    flex: 1,
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: '返回',
-        child: const Icon(
-          Icons.replay,
+        floatingActionButton: FloatingActionButton(
+          tooltip: '返回',
+          child: const Icon(
+            Icons.replay,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        onPressed: () {
-          Navigator.pop(context);
-        },
       ),
     );
   }
 
-  Widget buildContent() {
+  Widget buildContent(BuildContext buildContext) {
     return Column(
       children: [
         Row(
@@ -278,26 +288,29 @@ class _SubmitPageState extends State<SubmitPage> {
                   margin: const EdgeInsets.only(
                       left: Insets.px_4, top: Insets.px_16),
                   height: Insets.px_38,
-                  child: DropdownButton(
-                    underline: Container(height: 0),
-                    elevation: 0,
-                    focusColor: Colors.grey.withOpacity(0.2),
-                    hint:  Padding(
-                      padding: const EdgeInsets.only(left: Insets.px_8),
-                      child: Text(_classify),
+                  child: Consumer<HomeModel>(
+                    builder: (buildContext, HomeModel homeModel, _) =>
+                        DropdownButton(
+                      underline: Container(height: 0),
+                      elevation: 0,
+                      focusColor: Colors.grey.withOpacity(0.2),
+                      hint: Padding(
+                        padding: const EdgeInsets.only(left: Insets.px_8),
+                        child: Text(_classify),
+                      ),
+                      isExpanded: true,
+                      items: homeModel.webEntity.body.map((e) {
+                        return DropdownMenuItem(
+                          child: Text(e.webTitle),
+                          value: e.webTitle,
+                        );
+                      }).toList(),
+                      onChanged: (String? value) {
+                        setState(() {
+                          _classify = value!;
+                        });
+                      },
                     ),
-                    isExpanded: true,
-                    items: tempData.map((e) {
-                      return DropdownMenuItem(
-                        child: Text(e.title),
-                        value: e.title,
-                      );
-                    }).toList(),
-                    onChanged: (String? value) {
-                      setState(() {
-                        _classify = value!;
-                      });
-                    },
                   ),
                 )),
           ],
@@ -390,5 +403,15 @@ class _SubmitPageState extends State<SubmitPage> {
         )
       ],
     );
+  }
+
+  @override
+  void onBuildFinish() {
+    // TODO: implement onBuildFinish
+  }
+
+  @override
+  void onBuildStart() {
+    // TODO: implement onBuildStart
   }
 }

@@ -4,14 +4,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:grocery/main/about/about_page.dart';
 import 'package:grocery/main/comment/comment_page.dart';
 import 'package:grocery/main/detail/detail_page.dart';
+import 'package:grocery/main/home/home_page.dart';
 import 'package:grocery/main/link/link_page.dart';
 import 'package:grocery/main/submit/submit_page.dart';
 import 'package:grocery/widget/flutter_utils.dart';
-
 import 'com/global.dart';
 import 'com/injection/injection.dart';
 import 'generated/l10n.dart';
-import 'main/home/home_page.dart';
 
 void main() {
   configureDependencies();
@@ -24,6 +23,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Global.isMemorial
+        ? ColorFiltered(
+            colorFilter: const ColorFilter.mode(Colors.grey, BlendMode.color),
+            child: buildMaterial(),
+          )
+        : buildMaterial();
+  }
+
+  Widget buildMaterial() {
     return MaterialApp(
       title: S().title,
       theme: ThemeData(

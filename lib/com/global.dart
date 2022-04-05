@@ -22,6 +22,8 @@ class Global {
   static MaterialColor themeColor = _themes[0];
   static Color bgColor = Colors.white;
 
+  static bool isMemorial=false;
+
   // 是否为release版
   static bool get isRelease => const bool.fromEnvironment("dart.vm.product");
 

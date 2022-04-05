@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:grocery/model/web_entity.dart';
 
-final List<Item> _data = generateItems(title, subTitle, icons);
 
-final List<Item> _tips = generateItems(tips, [], tipIcon);
+final List<WebBody> _tips = generateItems(tips, [], tipIcon);
 
-List<Item> get tempData => _data;
-
-List<Item> get tempTips => _tips;
+List<WebBody> get tempTips => _tips;
 List<String> tips = [
   '留言板',
   '网站提交',
   '友情链接',
   '关于本站',
 ];
-List<IconData> tipIcon = [
-  Icons.textsms,
-  Icons.cloud_upload,
-  Icons.link,
-  Icons.info,
-];
 
+List<int> tipIcon = [
+  58962,// 58,962
+  57717, // 57,717
+  58240,  // 58,240
+  58172,  // 58,172
+];
 List<String> title = [
   '酷站推荐',
   '常用站点',
@@ -45,37 +43,23 @@ List<String> subTitle = [
 List<IconData> icons = [
   Icons.thumb_up_off_alt,
   Icons.star_border,
-  // Icons.ondemand_video,
+  Icons.ondemand_video,
   Icons.search,
-  // Icons.desktop_windows,
-  // Icons.library_books,
-  // Icons.headphones,
+  Icons.desktop_windows,
+  Icons.library_books,
+  Icons.headphones,
   Icons.construction,
   Icons.school,
   Icons.local_print_shop,
 ];
 
-class Item {
-  Item({
-    required this.title,
-    required this.subTitle,
-    required this.iconData,
-    this.isExpanded = false,
-  });
-
-  String title;
-  List<String> subTitle;
-  IconData iconData;
-  bool isExpanded;
-}
-
-List<Item> generateItems(
-    List<String> title, List<String> subTitle, List<IconData> icons) {
-  return List<Item>.generate(title.length, (int index) {
-    return Item(
-        title: title.elementAt(index),
-        subTitle: subTitle,
-        iconData: icons.elementAt(index));
+List<WebBody> generateItems(
+    List<String> title, List<String> subTitle, List<int> icons) {
+  return List<WebBody>.generate(title.length, (int index) {
+    WebBody webBody=WebBody();
+    webBody.webTitle=title.elementAt(index);
+    webBody.webIcon=icons.elementAt(index);
+    return webBody;
   });
 }
 

@@ -5,11 +5,11 @@ import 'package:grocery/base/base_stateful_widget.dart';
 import 'package:grocery/com/global.dart';
 import 'package:grocery/generated/l10n.dart';
 import 'package:grocery/widget/flutter_utils.dart';
-import 'package:grocery/widget/temp_data.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'home_drawer.dart';
+import 'home_model.dart';
 import 'home_view_model.dart';
 
 class HomePage extends BaseStatefulWidget {
@@ -23,7 +23,6 @@ class HomePage extends BaseStatefulWidget {
 
 class _HomeState extends BaseState<HomePage, HomeViewModel>
     with SingleTickerProviderStateMixin {
-
   bool _scrollToTop = false;
 
   late MediaQueryData _queryData;
@@ -49,6 +48,8 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
         }
       }
     });
+
+    viewModel.getWeb();
   }
 
   @override
@@ -96,7 +97,7 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
                     child: const HomeDrawer(),
                   ),
             Expanded(
-              child: buildContent(),
+              child: buildContent(context),
             ),
           ],
         ))
@@ -104,7 +105,7 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
     );
   }
 
-  Widget buildContent() {
+  Widget buildContent(BuildContext buildContext) {
     return SingleChildScrollView(
       controller: _scrollController,
       child: Column(
@@ -117,7 +118,9 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
                   'anim/main/loader.riv',
                   fit: BoxFit.cover,
                 ),
-                height: Responsive.isSmallScreen(context) ? Insets.width_260 : Insets.width_360,
+                height: Responsive.isSmallScreen(context)
+                    ? Insets.width_260
+                    : Insets.width_360,
               ),
               const HomeAppBar(),
             ],
@@ -125,12 +128,15 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
           Container(
             color: Global.bgColor,
             padding: const EdgeInsets.symmetric(horizontal: Insets.px_8),
-            child: ListView.builder(
-                itemCount: tempData.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (BuildContext context, int position) =>
-                    buildItem(context, position)),
+            child: Consumer<HomeModel>(
+              builder: (buildContext, HomeModel homeModel, _) =>
+                  ListView.builder(
+                      itemCount: homeModel.webEntity.body.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (BuildContext context, int position) =>
+                          buildItem(context, position)),
+            ),
           ),
           buildFooter(),
         ],
@@ -179,13 +185,16 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: Insets.px_16),
-          child: TextButton.icon(
-              onPressed: () {},
-              icon: Icon(tempData.elementAt(position).iconData),
-              label: Text(
-                tempData.elementAt(position).title,
-                style: TextStyles.h3,
-              )),
+          child: Consumer<HomeModel>(
+            builder: (buildContext, HomeModel homeModel, _) => TextButton.icon(
+                onPressed: () {},
+                icon: Icon(IconData(
+                    homeModel.webEntity.body.elementAt(position).webIcon)),
+                label: Text(
+                  homeModel.webEntity.body.elementAt(position).webTitle,
+                  style: TextStyles.h3,
+                )),
+          ),
         ),
         const HomeSubTitle(),
         Wrap(
@@ -286,7 +295,7 @@ class HomeSubTitle extends StatefulWidget {
   }
 }
 
-class _HomeSubTitleState extends State<HomeSubTitle> {
+class _HomeSubTitleState extends BaseState<HomeSubTitle,HomeViewModel> {
   int _index = 0;
 
   @override
@@ -325,45 +334,59 @@ class _HomeSubTitleState extends State<HomeSubTitle> {
                 ),
               ),
               duration: const Duration(milliseconds: 250)),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: List.generate(tempData[0].subTitle.length, (index) {
-              return MouseRegion(
-                onExit: (PointerExitEvent event) {
-                  setState(() {
-                    _index = 0;
-                  });
-                },
-                onEnter: (PointerEnterEvent event) {
-                  setState(() {
-                    _index = index;
-                  });
-                },
-                child: GestureDetector(
-                  onTap: () {
+          Consumer<HomeModel>(
+            builder: (buildConText, HomeModel homeModel, _) => Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: List.generate(homeModel.webEntity.body.length, (index) {
+                return MouseRegion(
+                  onExit: (PointerExitEvent event) {
+                    setState(() {
+                      _index = 0;
+                    });
+                  },
+                  onEnter: (PointerEnterEvent event) {
                     setState(() {
                       _index = index;
                     });
                   },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: Insets.px_4),
-                    alignment: Alignment.center,
-                    width: Insets.px_64,
-                    height: Insets.px_32,
-                    child: Text(
-                      tempData[0].subTitle[index],
-                      style: TextStyle(
-                          color: _index == index ? Colors.white : Colors.grey),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _index = index;
+                      });
+                    },
+                    child: Container(
+                      margin:
+                          const EdgeInsets.symmetric(horizontal: Insets.px_4),
+                      alignment: Alignment.center,
+                      width: Insets.px_64,
+                      height: Insets.px_32,
+                      child: Text(
+                        homeModel.webEntity.body.elementAt(index).webTitle,
+                        style: TextStyle(
+                            color:
+                                _index == index ? Colors.white : Colors.grey),
+                      ),
                     ),
                   ),
-                ),
-              );
-            }),
+                );
+              }),
+            ),
           ),
         ],
       ),
     );
+  }
+
+  @override
+  void onBuildFinish() {
+    // TODO: implement onBuildFinish
+  }
+
+  @override
+  void onBuildStart() {
+    // TODO: implement onBuildStart
   }
 }
 
@@ -392,9 +415,9 @@ class _HomeItemState extends State<HomeItem> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return GestureDetector (
-      onTap: (){
-        Navigator.pushNamed(context, PageRoutes.detail,arguments: 'detail');
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, PageRoutes.detail, arguments: 'detail');
       },
       child: SizedBox(
         height: 42,
@@ -407,17 +430,17 @@ class _HomeItemState extends State<HomeItem> {
             height: 36,
             decoration: _isHover
                 ? BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.grey.withOpacity(0.2), blurRadius: 8)
-              ],
-              color: Colors.white,
-              borderRadius: BorderRadius.circular((8)),
-            )
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey.withOpacity(0.2), blurRadius: 8)
+                    ],
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular((8)),
+                  )
                 : BoxDecoration(
-                border: Border.all(color: Colors.grey.withOpacity(0.2)),
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8)),
+                    border: Border.all(color: Colors.grey.withOpacity(0.2)),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8)),
             width: 160,
             child: MouseRegion(
               onEnter: (PointerEnterEvent event) {

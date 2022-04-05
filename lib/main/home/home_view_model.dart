@@ -17,4 +17,10 @@ class HomeViewModel extends BaseViewModel<HomeModel> {
   }
 
 
+  void getWeb()  async{
+    await model.getWeb();
+    notifyListeners();
+  }
+
+
 }
