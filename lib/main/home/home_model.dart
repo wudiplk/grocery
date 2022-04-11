@@ -1,8 +1,9 @@
-import 'package:grocery/model/dept_entity.dart';
-import 'package:grocery/model/web_entity.dart';
 import 'package:grocery/net/api.dart';
 import 'package:grocery/retrofit/api_client.dart';
 import 'package:injectable/injectable.dart';
+
+import '../../entity/dept_entity.dart';
+import '../../entity/web_entity.dart';
 
 /// injectable注解框架，用于注册getIt，使其能够方便调用
 @injectable
@@ -11,7 +12,7 @@ class HomeModel {
 
   late List<DeptEntity> list = [];
 
-  late WebEntity webEntity;
+  late WebEntity webEntity=WebEntity();
 
   HomeModel();
 
@@ -24,6 +25,6 @@ class HomeModel {
   }
 
   getWeb() async {
-    webEntity = await Api.getData<WebEntity>({});
+    webEntity=await ApiClient().getWebList();
   }
 }

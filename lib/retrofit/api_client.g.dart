@@ -8,7 +8,7 @@ part of 'api_client.dart';
 
 class _ApiClient implements ApiClient {
   _ApiClient(this._dio, {this.baseUrl}) {
-    baseUrl ??= 'https://data.zahuopu.top';
+    baseUrl ??= 'https://api.wudiplk.top';
   }
 
   final Dio _dio;
@@ -30,6 +30,22 @@ class _ApiClient implements ApiClient {
     var value = _result.data!
         .map((dynamic i) => RetrofitDept.fromJson(i as Map<String, dynamic>))
         .toList();
+    return value;
+  }
+
+  @override
+  Future<WebEntity> getWebList() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<WebEntity>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/web/getWebList',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = WebEntity.fromJson(_result.data!);
     return value;
   }
 

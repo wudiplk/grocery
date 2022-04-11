@@ -288,8 +288,8 @@ class _SubmitPageState extends BaseState<SubmitPage, HomeViewModel> {
                   margin: const EdgeInsets.only(
                       left: Insets.px_4, top: Insets.px_16),
                   height: Insets.px_38,
-                  child: Consumer<HomeModel>(
-                    builder: (buildContext, HomeModel homeModel, _) =>
+                  child: Consumer<HomeViewModel>(
+                    builder: (buildContext, HomeViewModel homeViewModel, _) =>
                         DropdownButton(
                       underline: Container(height: 0),
                       elevation: 0,
@@ -299,7 +299,7 @@ class _SubmitPageState extends BaseState<SubmitPage, HomeViewModel> {
                         child: Text(_classify),
                       ),
                       isExpanded: true,
-                      items: homeModel.webEntity.body.map((e) {
+                      items: homeViewModel.model.webEntity.body.map((e) {
                         return DropdownMenuItem(
                           child: Text(e.webTitle),
                           value: e.webTitle,

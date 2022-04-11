@@ -8,8 +8,9 @@ import 'package:grocery/widget/flutter_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../entity/web_entity.dart';
 import 'home_drawer.dart';
-import 'home_model.dart';
 import 'home_view_model.dart';
 
 class HomePage extends BaseStatefulWidget {
@@ -23,6 +24,8 @@ class HomePage extends BaseStatefulWidget {
 
 class _HomeState extends BaseState<HomePage, HomeViewModel>
     with SingleTickerProviderStateMixin {
+  int _subTitlePosition = 0;
+
   bool _scrollToTop = false;
 
   late MediaQueryData _queryData;
@@ -48,7 +51,6 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
         }
       }
     });
-
     viewModel.getWeb();
   }
 
@@ -128,10 +130,10 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
           Container(
             color: Global.bgColor,
             padding: const EdgeInsets.symmetric(horizontal: Insets.px_8),
-            child: Consumer<HomeModel>(
-              builder: (buildContext, HomeModel homeModel, _) =>
+            child: Consumer<HomeViewModel>(
+              builder: (buildContext, HomeViewModel homeViewModel, _) =>
                   ListView.builder(
-                      itemCount: homeModel.webEntity.body.length,
+                      itemCount: homeViewModel.model.webEntity.body.length,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (BuildContext context, int position) =>
@@ -179,35 +181,50 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
     );
   }
 
+  /// 创建主页网站列表详情
   Widget buildItem(BuildContext buildContext, int position) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: Insets.px_16),
-          child: Consumer<HomeModel>(
-            builder: (buildContext, HomeModel homeModel, _) => TextButton.icon(
-                onPressed: () {},
-                icon: Icon(IconData(
-                    homeModel.webEntity.body.elementAt(position).webIcon)),
-                label: Text(
-                  homeModel.webEntity.body.elementAt(position).webTitle,
-                  style: TextStyles.h3,
-                )),
-          ),
-        ),
-        const HomeSubTitle(),
-        Wrap(
-          direction: Axis.horizontal,
-          spacing: 16.0,
-          runSpacing: 6,
-          alignment: WrapAlignment.start,
-          children: List<HomeItem>.generate(11, (itemPosition) {
-            return const HomeItem();
-          }),
-        )
-      ],
-    );
+    return Consumer(
+        builder: (buildContext, HomeViewModel homeViewModel, _) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: Insets.px_16),
+                  child: TextButton.icon(
+                      onPressed: () {},
+                      icon: Icon(IconData(
+                          homeViewModel.model.webEntity.body
+                              .elementAt(position)
+                              .webIcon,
+                          fontFamily: 'MaterialIcons')),
+                      label: Text(
+                        homeViewModel.model.webEntity.body
+                            .elementAt(position)
+                            .webTitle,
+                        style: TextStyles.h3,
+                      )),
+                ),
+                HomeSubTitle(homeViewModel.model.webEntity.body
+                    .elementAt(position)
+                    .webSub),
+                Wrap(
+                  direction: Axis.horizontal,
+                  spacing: 16.0,
+                  runSpacing: 6,
+                  alignment: WrapAlignment.start,
+                  children: List<HomeItem>.generate(
+                      homeViewModel
+                          .model
+                          .webEntity
+                          .body[position]
+                          .webSub[_subTitlePosition]
+                          .webDetail
+                          .length, (itemPosition) {
+                    return HomeItem(homeViewModel.model.webEntity.body[position]
+                        .webSub[_subTitlePosition].webDetail[itemPosition]);
+                  }),
+                )
+              ],
+            ));
   }
 
   @override
@@ -286,8 +303,10 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
   }
 }
 
+/// 主页菜单耳机列表
 class HomeSubTitle extends StatefulWidget {
-  const HomeSubTitle({Key? key}) : super(key: key);
+  late List<WebBodyWebSub> webSub;
+  HomeSubTitle(this.webSub, {Key? key}) : super(key: key);
 
   @override
   _HomeSubTitleState createState() {
@@ -295,7 +314,8 @@ class HomeSubTitle extends StatefulWidget {
   }
 }
 
-class _HomeSubTitleState extends BaseState<HomeSubTitle,HomeViewModel> {
+class _HomeSubTitleState extends BaseState<HomeSubTitle, HomeViewModel> {
+
   int _index = 0;
 
   @override
@@ -334,45 +354,41 @@ class _HomeSubTitleState extends BaseState<HomeSubTitle,HomeViewModel> {
                 ),
               ),
               duration: const Duration(milliseconds: 250)),
-          Consumer<HomeModel>(
-            builder: (buildConText, HomeModel homeModel, _) => Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: List.generate(homeModel.webEntity.body.length, (index) {
-                return MouseRegion(
-                  onExit: (PointerExitEvent event) {
-                    setState(() {
-                      _index = 0;
-                    });
-                  },
-                  onEnter: (PointerEnterEvent event) {
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: List.generate(widget.webSub.length, (index) {
+              return MouseRegion(
+                onExit: (PointerExitEvent event) {
+                  setState(() {
+                    _index = 0;
+                  });
+                },
+                onEnter: (PointerEnterEvent event) {
+                  setState(() {
+                    _index = index;
+                  });
+                },
+                child: GestureDetector(
+                  onTap: () {
                     setState(() {
                       _index = index;
                     });
                   },
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _index = index;
-                      });
-                    },
-                    child: Container(
-                      margin:
-                          const EdgeInsets.symmetric(horizontal: Insets.px_4),
-                      alignment: Alignment.center,
-                      width: Insets.px_64,
-                      height: Insets.px_32,
-                      child: Text(
-                        homeModel.webEntity.body.elementAt(index).webTitle,
-                        style: TextStyle(
-                            color:
-                                _index == index ? Colors.white : Colors.grey),
-                      ),
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: Insets.px_4),
+                    alignment: Alignment.center,
+                    width: Insets.px_64,
+                    height: Insets.px_32,
+                    child: Text(
+                      widget.webSub.elementAt(index).webSubName,
+                      style: TextStyle(
+                          color: _index == index ? Colors.white : Colors.grey),
                     ),
                   ),
-                );
-              }),
-            ),
+                ),
+              );
+            }),
           ),
         ],
       ),
@@ -390,8 +406,10 @@ class _HomeSubTitleState extends BaseState<HomeSubTitle,HomeViewModel> {
   }
 }
 
+/// 主页菜单item
 class HomeItem extends StatefulWidget {
-  const HomeItem({Key? key}) : super(key: key);
+  WebBodyWebSubWebDetail webDetail;
+  HomeItem(this.webDetail, {Key? key}) : super(key: key);
 
   @override
   _HomeItemState createState() {
@@ -456,10 +474,28 @@ class _HomeItemState extends State<HomeItem> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Icon(Icons.ac_unit),
-                  Text("百度"),
-                  Icon(Icons.keyboard_arrow_right)
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: Insets.px_12),
+                    child: Image.network(
+                      widget.webDetail.webUrl + 'favicon.ico',
+                      height: Insets.px_24,
+                      width: Insets.px_24,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  Expanded(
+                      child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: Insets.px_12),
+                    child: Text(
+                      widget.webDetail.webName,
+                      maxLines: 1,
+                      textAlign: TextAlign.left,
+                      softWrap: false,
+                    ),
+                  )),
+                  const Icon(Icons.keyboard_arrow_right)
                 ],
               ),
             ),

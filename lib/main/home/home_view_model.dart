@@ -6,6 +6,15 @@ import 'home_model.dart';
 
 @injectable
 class HomeViewModel extends BaseViewModel<HomeModel> {
+  int _subTitlePosition = 0;
+
+  int get subTitlePosition => _subTitlePosition;
+
+  set subTitlePosition(int value) {
+    _subTitlePosition = value;
+    notifyListeners();
+  }
+
   getDept() async {
     await model.getDept();
     notifyListeners();

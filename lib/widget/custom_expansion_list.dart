@@ -13,7 +13,7 @@ class CustomExpansionList extends StatefulWidget {
       this.animationDuration = kThemeAnimationDuration})
       : super(key: key);
 
-  List<ExpansionPanel> children;
+  List<ExpansionPanel> children=<ExpansionPanel>[];
 
   ExpansionPanelCallback expansionCallback;
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grocery/model/web_entity.dart';
+import 'package:grocery/entity/web_entity.dart';
 
 
 final List<WebBody> _tips = generateItems(tips, [], tipIcon);

@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery/generated/l10n.dart';
 import 'package:grocery/main/home/home_view_model.dart';
-import 'package:grocery/model/web_entity.dart';
 import 'package:grocery/widget/custom_expansion_list.dart';
 import 'package:grocery/widget/flutter_utils.dart';
 import 'package:grocery/widget/temp_data.dart';
@@ -11,7 +10,7 @@ import 'package:provider/provider.dart';
 import '../../base/base_state.dart';
 import '../../base/base_stateful_widget.dart';
 import '../../com/global.dart';
-import 'home_model.dart';
+import '../../entity/web_entity.dart';
 
 /// 侧滑栏
 class HomeDrawer extends BaseStatefulWidget {
@@ -33,21 +32,16 @@ class _HomeDrawerState extends BaseState<HomeDrawer, HomeViewModel> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider.value(value: viewModel),
-      ],
-      child: Container(
-        color: Global.bgColor,
-        child: Responsive.isSmallScreen(context)
-            ? SafeArea(
-                child: Responsive.isMediumScreen(context)
-                    ? _buildMediumMenu(context)
-                    : _buildLargeMenu(context))
-            : Responsive.isMediumScreen(context)
-                ? _buildMediumMenu(context)
-                : _buildLargeMenu(context),
-      ),
+    return Container(
+      color: Global.bgColor,
+      child: Responsive.isSmallScreen(context)
+          ? SafeArea(
+              child: Responsive.isMediumScreen(context)
+                  ? _buildMediumMenu(context)
+                  : _buildLargeMenu(context))
+          : Responsive.isMediumScreen(context)
+              ? _buildMediumMenu(context)
+              : _buildLargeMenu(context),
     );
   }
 
@@ -81,68 +75,15 @@ class _HomeDrawerState extends BaseState<HomeDrawer, HomeViewModel> {
                   ],
                 ),
               ),
-              Consumer<HomeModel>(
-                  builder: (buildContext, HomeModel homeModel, _) => SizedBox(
+              Consumer<HomeViewModel>(
+                  builder: (buildContext, HomeViewModel homeViewModel, _) =>
+                      SizedBox(
                         width: Insets.width_230,
-                        height: (homeModel.webEntity.body.length + 6) *
-                            Insets.width_58,
-                        child: CustomExpansionList(
-                          expansionCallback: (int panelIndex, bool isExpanded) {
-                            setState(() {
-                              if (isExpandedIndex >= 0 &&
-                                  homeModel.webEntity.body[isExpandedIndex]
-                                      .expanded) {
-                                homeModel.webEntity.body[isExpandedIndex]
-                                    .expanded = false;
-                              }
-                              isExpandedItem?.expanded = false;
-                              homeModel.webEntity.body[panelIndex].expanded =
-                                  !isExpanded;
-                            });
-                            isExpandedIndex = panelIndex;
-                          },
-                          children: homeModel.webEntity.body
-                              .map<ExpansionPanel>((WebBody item) {
-                            return ExpansionPanel(
-                                backgroundColor: Global.bgColor,
-                                canTapOnHeader: true,
-                                isExpanded: item.expanded,
-                                headerBuilder:
-                                    (BuildContext context, bool isExpand) {
-                                  return Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: Insets.px_18),
-                                        child: Icon(
-                                          IconData(item.webIcon),
-                                          color: Global.themeColor,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: Insets.px_38),
-                                        child: Text(
-                                          item.webTitle,
-                                          style: TextStyles.h2,
-                                        ),
-                                      )
-                                    ],
-                                  );
-                                },
-                                body: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: item.webSub.map((subItem) {
-                                    return Text(
-                                      subItem.webSubName,
-                                      textAlign: TextAlign.start,
-                                      style: TextStyles.h2,
-                                    );
-                                  }).toList(),
-                                ));
-                          }).toList(),
-                        ),
+                        height:
+                            (homeViewModel.model.webEntity.body.length + 6) *
+                                Insets.width_58,
+                        child:
+                            buildCustomList(homeViewModel.model.webEntity.body),
                       ))
             ],
           ),
@@ -174,9 +115,10 @@ class _HomeDrawerState extends BaseState<HomeDrawer, HomeViewModel> {
                 alignment: Alignment.center,
                 child: Icon(Icons.pets, color: Global.themeColor),
               ),
-              Consumer<HomeModel>(
-                  builder: (buildContext, HomeModel homeModel, _) => Column(
-                        children: homeModel.webEntity.body.map((e) {
+              Consumer<HomeViewModel>(
+                  builder: (buildContext, HomeViewModel homeViewModel, _) =>
+                      Column(
+                        children: homeViewModel.model.webEntity.body.map((e) {
                           return HomeMenuItemMid(item: e);
                         }).toList(),
                       ))
@@ -204,6 +146,59 @@ class _HomeDrawerState extends BaseState<HomeDrawer, HomeViewModel> {
   @override
   void onBuildStart() {
     // TODO: implement onBuildStart
+  }
+
+  Widget buildCustomList(List<WebBody> body) {
+    return body.isNotEmpty
+        ? CustomExpansionList(
+            expansionCallback: (int panelIndex, bool isExpanded) {
+              setState(() {
+                if (isExpandedIndex >= 0 && body[isExpandedIndex].expanded) {
+                  body[isExpandedIndex].expanded = false;
+                }
+                isExpandedItem?.expanded = false;
+                body[panelIndex].expanded = !isExpanded;
+              });
+              isExpandedIndex = panelIndex;
+            },
+            children: List.generate(
+                body.length,
+                (index) => ExpansionPanel(
+                    backgroundColor: Global.bgColor,
+                    canTapOnHeader: true,
+                    isExpanded: body[index].expanded,
+                    headerBuilder: (BuildContext context, bool isExpand) {
+                      return Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: Insets.px_18),
+                            child: Icon(
+                              IconData(body[index].webIcon,fontFamily: 'MaterialIcons'),
+                              color: Global.themeColor,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: Insets.px_38),
+                            child: Text(
+                              body[index].webTitle,
+                              style: TextStyles.h2,
+                            ),
+                          )
+                        ],
+                      );
+                    },
+                    body: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: body[index].webSub.map((subItem) {
+                        return Text(
+                          subItem.webSubName,
+                          textAlign: TextAlign.start,
+                          style: TextStyles.h2,
+                        );
+                      }).toList(),
+                    ))),
+          )
+        : Container();
   }
 }
 
@@ -272,7 +267,7 @@ class _HomeMenuItemLargeState extends State<HomeMenuItemLarge> {
                 Padding(
                   padding: const EdgeInsets.only(left: Insets.px_18),
                   child: Icon(
-                    IconData(widget.item.webIcon),
+                    IconData(widget.item.webIcon,fontFamily: 'MaterialIcons'),
                     color: Global.themeColor,
                   ),
                 ),
@@ -332,7 +327,7 @@ class _HomeMenuItemMid extends State<HomeMenuItemMid> {
                   borderRadius: BorderRadius.circular(Insets.px_4))
               : const BoxDecoration(),
           child: Icon(
-            IconData(widget.item.webIcon),
+            IconData(widget.item.webIcon,fontFamily: 'MaterialIcons'),
             color: Global.themeColor,
           ),
         ),

@@ -18,13 +18,13 @@ class Env {
   // 开发环境
   static final EnvConfig _debugConfig = EnvConfig(
     appTitle: "debugTitle",
-    appDomain: "http://www.debugxxx.com",
+    appDomain: "http://localhost:8080",
   );
 
   // 发布环境
   static final EnvConfig _releaseConfig = EnvConfig(
     appTitle: "releaseTitle",
-    appDomain: "http://www.releasexxx.com",
+    appDomain: "https://api.wudiplk.top",
   );
 
   // 测试环境
@@ -37,6 +37,7 @@ class Env {
 
   // 根据不同环境返回对应的环境配置
   static EnvConfig _getEnvConfig() {
+    print('$appEnv');
     switch (appEnv) {
       case EnvName.debug:
         return _debugConfig;
@@ -48,13 +49,13 @@ class Env {
         return _debugConfig;
     }
   }
+
 }
 
 /// 声明的环境
 abstract class EnvName {
   // 环境key
   static const String envKey = "DART_DEFINE_APP_ENV";
-
   // 环境value
   static const String debug = "debug";
   static const String release = "release";
