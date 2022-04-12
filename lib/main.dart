@@ -39,10 +39,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Global.themes[Global.profile.theme],
       ),
       builder: EasyLoading.init(),
-      home: Container(
-        child: const HomePage(),
-        color: Colors.white,
-      ),
+      home: const SubmitPage(),
       routes: <String, WidgetBuilder>{
         PageRoutes.about: (context) => const AboutPage(),
         PageRoutes.link: (context) => const LinkPage(),

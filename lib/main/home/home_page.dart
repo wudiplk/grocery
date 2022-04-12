@@ -99,7 +99,10 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
                     child: const HomeDrawer(),
                   ),
             Expanded(
-              child: buildContent(context),
+              child: Container(
+                child: buildContent(context),
+                color: Colors.white,
+              ),
             ),
           ],
         ))
@@ -164,7 +167,7 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
           ),
           FittedBox(
             child: Listener(
-              child: Text(' 粤ICP备2021107512号', style: TextStyles.footer),
+              child: Text('  粤ICP备2021107512号', style: TextStyles.footer),
               onPointerDown: (PointerEvent event) async {
                 var _url = "https://beian.miit.gov.cn/";
                 if (!await launch(_url)) {

@@ -1,5 +1,6 @@
-import 'package:grocery/entity/retrofit_dept.dart';
 import 'package:grocery/generated/json/base/json_convert_content.dart';
+import 'package:grocery/entity/retrofit_dept.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 
 RetrofitDept $RetrofitDeptFromJson(Map<String, dynamic> json) {

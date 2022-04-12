@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:grocery/generated/json/base/json_field.dart';
 import 'package:grocery/generated/json/web_entity.g.dart';
+
 @JsonSerializable()
 class WebEntity {
 
-	late int status=0;
-	late String message="";
+	late int status;
+	late String message;
 	late List<WebBody> body=[];
   
   WebEntity();
@@ -23,10 +24,11 @@ class WebEntity {
 @JsonSerializable()
 class WebBody {
 
-	late String webTitle="";
-	late int webIcon=0;
+	late String webTitle;
+	late int webIcon;
+	late int webId;
 	late List<WebBodyWebSub> webSub=[];
-	late bool expanded=false;
+	late bool expanded;
   
   WebBody();
 
@@ -43,7 +45,8 @@ class WebBody {
 @JsonSerializable()
 class WebBodyWebSub {
 
-	late String webSubName="";
+	late String webSubName;
+	late int webSubId;
 	late List<WebBodyWebSubWebDetail> webDetail=[];
   
   WebBodyWebSub();
@@ -61,6 +64,9 @@ class WebBodyWebSub {
 @JsonSerializable()
 class WebBodyWebSubWebDetail {
 
+	late int webDetailId;
+	late int webId;
+	late int webSubId;
 	late String webName;
 	late String webUrl;
 	late String webDescribe;

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:grocery/main/home/home_model.dart';
-import 'package:grocery/widget/temp_data.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 
@@ -30,7 +28,8 @@ class _SubmitPageState extends BaseState<SubmitPage, HomeViewModel> {
   String _name = '';
   String _url = '';
   String _describe = '';
-  String _classify = '选择分类*';
+  String _classify = '选择类型*';
+  String _plate = '选择板块*';
   String _key = '';
   String _introduce = '';
 
@@ -137,228 +136,13 @@ class _SubmitPageState extends BaseState<SubmitPage, HomeViewModel> {
   Widget buildContent(BuildContext buildContext) {
     return Column(
       children: [
-        Row(
-          children: [
-            Flexible(
-                flex: 1,
-                fit: FlexFit.tight,
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.2),
-                    borderRadius:
-                        const BorderRadius.all(Radius.circular(Insets.px_4)),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: Insets.px_8),
-                  margin: const EdgeInsets.only(
-                      right: Insets.px_4, top: Insets.px_16),
-                  height: Insets.px_38,
-                  child: TextField(
-                    controller: _nameController,
-                    textAlignVertical: TextAlignVertical.center,
-                    keyboardType: TextInputType.url,
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.only(top: 0, left: 0),
-                      hintText: '网站名称*',
-                      hintMaxLines: 1,
-                      icon: Icon(Icons.web),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.transparent),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                        ),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                        ),
-                      ),
-                    ),
-                  ),
-                )),
-            Flexible(
-                fit: FlexFit.tight,
-                flex: 1,
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.2),
-                    borderRadius:
-                        const BorderRadius.all(Radius.circular(Insets.px_4)),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: Insets.px_8),
-                  margin: const EdgeInsets.only(
-                      left: Insets.px_4, top: Insets.px_16),
-                  height: Insets.px_38,
-                  child: TextField(
-                    controller: _urlController,
-                    textAlignVertical: TextAlignVertical.center,
-                    keyboardType: TextInputType.url,
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.only(top: 0, left: 0),
-                      hintText: '网站链接',
-                      hintMaxLines: 1,
-                      icon: Icon(Icons.link),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.transparent),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                        ),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                        ),
-                      ),
-                    ),
-                  ),
-                )),
-          ],
-        ),
-        Row(
-          children: [
-            Flexible(
-                flex: 1,
-                fit: FlexFit.tight,
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.2),
-                    borderRadius:
-                        const BorderRadius.all(Radius.circular(Insets.px_4)),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: Insets.px_8),
-                  margin: const EdgeInsets.only(
-                      right: Insets.px_4, top: Insets.px_16),
-                  height: Insets.px_38,
-                  child: TextField(
-                    controller: _describeController,
-                    textAlignVertical: TextAlignVertical.center,
-                    keyboardType: TextInputType.url,
-                    decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.only(top: 0, left: 0),
-                      hintText: '网站描述*',
-                      hintMaxLines: 1,
-                      icon: Icon(Icons.description),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.transparent),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                        ),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                        ),
-                      ),
-                    ),
-                  ),
-                )),
-            Flexible(
-                fit: FlexFit.tight,
-                flex: 1,
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.2),
-                    borderRadius:
-                        const BorderRadius.all(Radius.circular(Insets.px_4)),
-                  ),
-                  margin: const EdgeInsets.only(
-                      left: Insets.px_4, top: Insets.px_16),
-                  height: Insets.px_38,
-                  child: Consumer<HomeViewModel>(
-                    builder: (buildContext, HomeViewModel homeViewModel, _) =>
-                        DropdownButton(
-                      underline: Container(height: 0),
-                      elevation: 0,
-                      focusColor: Colors.grey.withOpacity(0.2),
-                      hint: Padding(
-                        padding: const EdgeInsets.only(left: Insets.px_8),
-                        child: Text(_classify),
-                      ),
-                      isExpanded: true,
-                      items: homeViewModel.model.webEntity.body.map((e) {
-                        return DropdownMenuItem(
-                          child: Text(e.webTitle),
-                          value: e.webTitle,
-                        );
-                      }).toList(),
-                      onChanged: (String? value) {
-                        setState(() {
-                          _classify = value!;
-                        });
-                      },
-                    ),
-                  ),
-                )),
-          ],
-        ),
+        buildRowOne(),
+        buildRowTwo(),
+        buildRowThree(),
         Container(
-          alignment: Alignment.center,
-          margin:
-              const EdgeInsets.only(top: Insets.px_16, bottom: Insets.px_16),
-          decoration: BoxDecoration(
-            color: Colors.grey.withOpacity(0.2),
-            borderRadius: const BorderRadius.all(Radius.circular(Insets.px_4)),
-          ),
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: Insets.px_8),
-          height: Insets.px_38,
-          child: TextField(
-            controller: _keyController,
-            textAlignVertical: TextAlignVertical.center,
-            keyboardType: TextInputType.url,
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.only(top: 0, left: 0),
-              hintText: '网站关键字*',
-              hintMaxLines: 1,
-              icon: Icon(Icons.star),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.transparent),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.transparent,
-                ),
-              ),
-              disabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.transparent,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.transparent,
-                ),
-              ),
-            ),
-          ),
-        ),
-        const Align(
+          margin: const EdgeInsets.only(top: Insets.px_16),
           alignment: Alignment.centerLeft,
-          child: Text(
+          child: const Text(
             '网站介绍：',
             textAlign: TextAlign.left,
             style: TextStyle(color: Colors.black, fontSize: Insets.px_16),
@@ -413,5 +197,282 @@ class _SubmitPageState extends BaseState<SubmitPage, HomeViewModel> {
   @override
   void onBuildStart() {
     // TODO: implement onBuildStart
+  }
+
+  Widget buildRowOne() {
+    return Row(
+      children: [
+        Flexible(
+            flex: 1,
+            fit: FlexFit.tight,
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.2),
+                borderRadius:
+                    const BorderRadius.all(Radius.circular(Insets.px_4)),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: Insets.px_8),
+              margin:
+                  const EdgeInsets.only(right: Insets.px_4, top: Insets.px_16),
+              height: Insets.px_38,
+              child: TextField(
+                controller: _nameController,
+                textAlignVertical: TextAlignVertical.center,
+                keyboardType: TextInputType.url,
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.only(top: 0, left: 0),
+                  hintText: '网站名称*',
+                  hintMaxLines: 1,
+                  icon: Icon(Icons.web),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                ),
+              ),
+            )),
+        Flexible(
+            fit: FlexFit.tight,
+            flex: 1,
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.2),
+                borderRadius:
+                    const BorderRadius.all(Radius.circular(Insets.px_4)),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: Insets.px_8),
+              margin:
+                  const EdgeInsets.only(left: Insets.px_4, top: Insets.px_16),
+              height: Insets.px_38,
+              child: TextField(
+                controller: _urlController,
+                textAlignVertical: TextAlignVertical.center,
+                keyboardType: TextInputType.url,
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.only(top: 0, left: 0),
+                  hintText: '网站链接*',
+                  hintMaxLines: 1,
+                  icon: Icon(Icons.link),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                ),
+              ),
+            )),
+      ],
+    );
+  }
+
+  Widget buildRowTwo() {
+    return Row(
+      children: [
+        Flexible(
+            flex: 1,
+            fit: FlexFit.tight,
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.2),
+                borderRadius:
+                    const BorderRadius.all(Radius.circular(Insets.px_4)),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: Insets.px_8),
+              margin:
+                  const EdgeInsets.only(right: Insets.px_4, top: Insets.px_16),
+              height: Insets.px_38,
+              child: TextField(
+                controller: _describeController,
+                textAlignVertical: TextAlignVertical.center,
+                keyboardType: TextInputType.url,
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.only(top: 0, left: 0),
+                  hintText: '网站描述*',
+                  hintMaxLines: 1,
+                  icon: Icon(Icons.description),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                ),
+              ),
+            )),
+        Flexible(
+            fit: FlexFit.tight,
+            flex: 1,
+            child: Container(
+              alignment: Alignment.center,
+              margin:
+                  const EdgeInsets.only(left: Insets.px_4, top: Insets.px_16),
+              decoration: BoxDecoration(
+                color: Colors.grey.withOpacity(0.2),
+                borderRadius:
+                    const BorderRadius.all(Radius.circular(Insets.px_4)),
+              ),
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: Insets.px_8),
+              height: Insets.px_38,
+              child: TextField(
+                controller: _keyController,
+                textAlignVertical: TextAlignVertical.center,
+                keyboardType: TextInputType.url,
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.only(top: 0, left: 0),
+                  hintText: '网站关键字*',
+                  hintMaxLines: 1,
+                  icon: Icon(Icons.star),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.transparent),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                ),
+              ),
+            )),
+      ],
+    );
+  }
+
+  Widget buildRowThree() {
+    return Row(
+      children: [
+        Flexible(
+          flex: 1,
+          fit: FlexFit.tight,
+          child: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.2),
+              borderRadius:
+                  const BorderRadius.all(Radius.circular(Insets.px_4)),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: Insets.px_8),
+            margin:
+                const EdgeInsets.only(right: Insets.px_4, top: Insets.px_16),
+            height: Insets.px_38,
+            child: Consumer<HomeViewModel>(
+              builder: (buildContext, HomeViewModel homeViewModel, _) =>
+                  DropdownButton(
+                underline: Container(height: 0),
+                elevation: 0,
+                focusColor: Colors.grey.withOpacity(0.2),
+                hint: Padding(
+                  padding: const EdgeInsets.only(left: Insets.px_8),
+                  child: Text(_plate),
+                ),
+                isExpanded: true,
+                items: homeViewModel.model.webEntity.body.map((e) {
+                  return DropdownMenuItem(
+                    child: Text(e.webTitle),
+                    value: e.webTitle,
+                  );
+                }).toList(),
+                onChanged: (String? value) {
+                  setState(() {
+                    _classify = value!;
+                  });
+                },
+              ),
+            ),
+          ),
+        ),
+        Flexible(
+          flex: 1,
+          fit: FlexFit.tight,
+          child: Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.2),
+              borderRadius:
+                  const BorderRadius.all(Radius.circular(Insets.px_4)),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: Insets.px_8),
+            margin: const EdgeInsets.only(left: Insets.px_4, top: Insets.px_16),
+            height: Insets.px_38,
+            child: Consumer<HomeViewModel>(
+              builder: (buildContext, HomeViewModel homeViewModel, _) =>
+                  DropdownButton(
+                underline: Container(height: 0),
+                elevation: 0,
+                focusColor: Colors.grey.withOpacity(0.2),
+                hint: Padding(
+                  padding: const EdgeInsets.only(left: Insets.px_8),
+                  child: Text(_classify),
+                ),
+                isExpanded: true,
+                items: homeViewModel.model.webEntity.body.map((e) {
+                  return DropdownMenuItem(
+                    child: Text(e.webTitle),
+                    value: e.webTitle,
+                  );
+                }).toList(),
+                onChanged: (String? value) {
+                  setState(() {
+                    _classify = value!;
+                  });
+                },
+              ),
+            ),
+          ),
+        )
+      ],
+    );
   }
 }

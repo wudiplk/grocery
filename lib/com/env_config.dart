@@ -16,19 +16,19 @@ class Env {
   static const appEnv = String.fromEnvironment(EnvName.envKey);
 
   // 开发环境
-  static final EnvConfig _debugConfig = EnvConfig(
+  static final EnvConfig debugConfig = EnvConfig(
     appTitle: "debugTitle",
     appDomain: "http://localhost:8080",
   );
 
   // 发布环境
-  static final EnvConfig _releaseConfig = EnvConfig(
+  static final EnvConfig releaseConfig = EnvConfig(
     appTitle: "releaseTitle",
     appDomain: "https://api.wudiplk.top",
   );
 
   // 测试环境
-  static final EnvConfig _testConfig = EnvConfig(
+  static final EnvConfig testConfig = EnvConfig(
     appTitle: "testTitle",
     appDomain: "http://www.testxxx.com",
   );
@@ -40,13 +40,13 @@ class Env {
     print('$appEnv');
     switch (appEnv) {
       case EnvName.debug:
-        return _debugConfig;
+        return debugConfig;
       case EnvName.release:
-        return _releaseConfig;
+        return releaseConfig;
       case EnvName.test:
-        return _testConfig;
+        return testConfig;
       default:
-        return _debugConfig;
+        return debugConfig;
     }
   }
 

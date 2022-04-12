@@ -12,7 +12,8 @@ part 'api_client.g.dart';
 abstract class ApiClient {
   factory ApiClient({Dio? dio}) {
     dio ??= BaseDio.getInstance().getDio();
-    return _ApiClient(dio, baseUrl: Env.envConfig.appDomain);
+    // return _ApiClient(dio, baseUrl: Env.envConfig.appDomain);
+    return _ApiClient(dio, baseUrl: Env.debugConfig.appDomain);
   }
 
   @GET('/depart/selectAll')
