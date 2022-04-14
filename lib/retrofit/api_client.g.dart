@@ -49,6 +49,38 @@ class _ApiClient implements ApiClient {
     return value;
   }
 
+  @override
+  Future<PlateEntity> getPlate() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PlateEntity>(
+            Options(method: 'GET', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/web/getPlate',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = PlateEntity.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<ClassifyEntity> getClassify(webId) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ClassifyEntity>(
+            Options(method: 'POST', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/web/getClassify',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ClassifyEntity.fromJson(_result.data!);
+    return value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

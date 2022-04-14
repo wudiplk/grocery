@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:grocery/entity/classify_entity.dart';
 import 'package:grocery/entity/plate_entity.dart';
 import 'package:grocery/retrofit/api_client.dart';
 import 'package:injectable/injectable.dart';
@@ -9,9 +11,16 @@ class SubmitModel {
 
   PlateEntity plateEntity = PlateEntity();
 
+  ClassifyEntity classifyEntity=ClassifyEntity();
+
   SubmitModel();
 
   getPlate() async {
     plateEntity = await ApiClient().getPlate();
+  }
+
+  getClassify(int webId) async{
+    debugPrint('webId:  $webId');
+    classifyEntity=await ApiClient().getClassify(webId);
   }
 }

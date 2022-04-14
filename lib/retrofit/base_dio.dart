@@ -6,7 +6,7 @@ class BaseDio {
   /// 把构造方法私有化
   BaseDio._internal();
 
-  static late final BaseDio _baseDio;
+  static late final BaseDio _baseDio=BaseDio._internal();
 
   static const codeSuccess = 200;
   static const codeTimeOut = -1;
@@ -14,7 +14,6 @@ class BaseDio {
   static const receiveTimeout = 15000;
 
   static BaseDio getInstance() {
-    _baseDio = BaseDio._internal();
     return _baseDio;
   }
 

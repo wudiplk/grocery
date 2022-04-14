@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grocery/entity/plate_entity.dart';
 import 'package:grocery/main/submit/submit_viem_model.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
@@ -61,6 +62,8 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
       ..addListener(() {
         _introduce = _introduceController.text;
       });
+
+    viewModel.getPlate();
   }
 
   @override
@@ -409,7 +412,7 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
                 const EdgeInsets.only(right: Insets.px_4, top: Insets.px_16),
             height: Insets.px_38,
             child: Consumer<SubmitViewModel>(
-              builder: (buildContext, SubmitViewModel subVm, _) =>
+              builder: (buildContext, SubmitViewModel subVM, _) =>
                   DropdownButton(
                 underline: Container(height: 0),
                 elevation: 0,
@@ -419,7 +422,7 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
                   child: Text(_plate),
                 ),
                 isExpanded: true,
-                items: subVm.model.getPlate()..map((e) {
+                items: subVM.model.plateEntity.body.map((e) {
                   return DropdownMenuItem(
                     child: Text(e.webTitle),
                     value: e.webTitle,
@@ -427,8 +430,15 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
                 }).toList(),
                 onChanged: (String? value) {
                   setState(() {
-                    _classify = value!;
+                    _plate = value!;
                   });
+                  for (var plate in viewModel.model.plateEntity.body) {
+                    if (plate.webTitle == value) {
+                      debugPrint('value:  $value');
+                      viewModel.getClassify(plate.webId);
+                      break;
+                    }
+                  }
                 },
               ),
             ),
@@ -447,8 +457,8 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
             padding: const EdgeInsets.symmetric(horizontal: Insets.px_8),
             margin: const EdgeInsets.only(left: Insets.px_4, top: Insets.px_16),
             height: Insets.px_38,
-            child: Consumer<HomeViewModel>(
-              builder: (buildContext, HomeViewModel homeViewModel, _) =>
+            child: Consumer<SubmitViewModel>(
+              builder: (buildContext, SubmitViewModel subVM, _) =>
                   DropdownButton(
                 underline: Container(height: 0),
                 elevation: 0,
@@ -458,7 +468,7 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
                   child: Text(_classify),
                 ),
                 isExpanded: true,
-                items: homeViewModel.model.webEntity.body.map((e) {
+                items: subVM.model.plateEntity.body.map((e) {
                   return DropdownMenuItem(
                     child: Text(e.webTitle),
                     value: e.webTitle,

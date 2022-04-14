@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:grocery/entity/classify_entity.dart';
 import 'package:grocery/entity/plate_entity.dart';
 import 'package:grocery/entity/retrofit_dept.dart';
 import 'package:grocery/entity/web_entity.dart';
@@ -14,7 +16,7 @@ abstract class ApiClient {
   factory ApiClient({Dio? dio}) {
     dio ??= BaseDio.getInstance().getDio();
     // return _ApiClient(dio, baseUrl: Env.envConfig.appDomain);
-    return _ApiClient(dio, baseUrl: Env.debugConfig.appDomain);
+    return _ApiClient(dio, baseUrl: Env.releaseConfig.appDomain);
   }
 
   @GET('/depart/selectAll')
@@ -26,4 +28,6 @@ abstract class ApiClient {
   @GET('/web/getPlate')
   Future<PlateEntity> getPlate();
 
+  @POST('/web/getClassify')
+  Future<ClassifyEntity> getClassify(@Path("webId") int webId);
 }

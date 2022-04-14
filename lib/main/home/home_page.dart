@@ -134,9 +134,9 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
             color: Global.bgColor,
             padding: const EdgeInsets.symmetric(horizontal: Insets.px_8),
             child: Consumer<HomeViewModel>(
-              builder: (buildContext, HomeViewModel homeViewModel, _) =>
+              builder: (buildContext, HomeViewModel homeVM, _) =>
                   ListView.builder(
-                      itemCount: homeViewModel.model.webEntity.body.length,
+                      itemCount: homeVM.model.webEntity.body.length,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (BuildContext context, int position) =>
@@ -187,7 +187,7 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
   /// 创建主页网站列表详情
   Widget buildItem(BuildContext buildContext, int position) {
     return Consumer(
-        builder: (buildContext, HomeViewModel homeViewModel, _) => Column(
+        builder: (buildContext, HomeViewModel homeVM, _) => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
@@ -195,18 +195,18 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
                   child: TextButton.icon(
                       onPressed: () {},
                       icon: Icon(IconData(
-                          homeViewModel.model.webEntity.body
+                          homeVM.model.webEntity.body
                               .elementAt(position)
                               .webIcon,
                           fontFamily: 'MaterialIcons')),
                       label: Text(
-                        homeViewModel.model.webEntity.body
+                        homeVM.model.webEntity.body
                             .elementAt(position)
                             .webTitle,
                         style: TextStyles.h3,
                       )),
                 ),
-                HomeSubTitle(homeViewModel.model.webEntity.body
+                HomeSubTitle(homeVM.model.webEntity.body
                     .elementAt(position)
                     .webSub),
                 Wrap(
@@ -215,14 +215,14 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
                   runSpacing: 6,
                   alignment: WrapAlignment.start,
                   children: List<HomeItem>.generate(
-                      homeViewModel
+                      homeVM
                           .model
                           .webEntity
                           .body[position]
                           .webSub[_subTitlePosition]
                           .webDetail
                           .length, (itemPosition) {
-                    return HomeItem(homeViewModel.model.webEntity.body[position]
+                    return HomeItem(homeVM.model.webEntity.body[position]
                         .webSub[_subTitlePosition].webDetail[itemPosition]);
                   }),
                 )
