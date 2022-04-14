@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:grocery/com/profile.dart';
 import 'package:grocery/entity/dept_entity.dart';
+import 'package:grocery/entity/plate_entity.dart';
 import 'package:grocery/entity/retrofit_dept.dart';
 import 'package:grocery/entity/web_entity.dart';
 
@@ -16,6 +17,8 @@ class JsonConvert {
 	static final Map<String, JsonConvertFunction> _convertFuncMap = {
 		(Profile).toString(): Profile.fromJson,
 		(DeptEntity).toString(): DeptEntity.fromJson,
+		(PlateEntity).toString(): PlateEntity.fromJson,
+		(PlateBody).toString(): PlateBody.fromJson,
 		(RetrofitDept).toString(): RetrofitDept.fromJson,
 		(WebEntity).toString(): WebEntity.fromJson,
 		(WebBody).toString(): WebBody.fromJson,
@@ -101,6 +104,12 @@ class JsonConvert {
 		}
 		if(<DeptEntity>[] is M){
 			return data.map<DeptEntity>((Map<String, dynamic> e) => DeptEntity.fromJson(e)).toList() as M;
+		}
+		if(<PlateEntity>[] is M){
+			return data.map<PlateEntity>((Map<String, dynamic> e) => PlateEntity.fromJson(e)).toList() as M;
+		}
+		if(<PlateBody>[] is M){
+			return data.map<PlateBody>((Map<String, dynamic> e) => PlateBody.fromJson(e)).toList() as M;
 		}
 		if(<RetrofitDept>[] is M){
 			return data.map<RetrofitDept>((Map<String, dynamic> e) => RetrofitDept.fromJson(e)).toList() as M;

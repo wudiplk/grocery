@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:grocery/entity/plate_entity.dart';
 import 'package:grocery/entity/retrofit_dept.dart';
 import 'package:grocery/entity/web_entity.dart';
 import 'package:retrofit/http.dart';
@@ -21,4 +22,8 @@ abstract class ApiClient {
 
   @GET('/web/getWebList')
   Future<WebEntity> getWebList();
+
+  @GET('/web/getPlate')
+  Future<PlateEntity> getPlate();
+
 }

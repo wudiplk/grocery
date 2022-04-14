@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grocery/main/submit/submit_viem_model.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 
@@ -17,7 +18,7 @@ class SubmitPage extends BaseStatefulWidget {
   }
 }
 
-class _SubmitPageState extends BaseState<SubmitPage, HomeViewModel> {
+class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
   late TextEditingController _nameController;
   late TextEditingController _urlController;
   late TextEditingController _describeController;
@@ -407,8 +408,8 @@ class _SubmitPageState extends BaseState<SubmitPage, HomeViewModel> {
             margin:
                 const EdgeInsets.only(right: Insets.px_4, top: Insets.px_16),
             height: Insets.px_38,
-            child: Consumer<HomeViewModel>(
-              builder: (buildContext, HomeViewModel homeViewModel, _) =>
+            child: Consumer<SubmitViewModel>(
+              builder: (buildContext, SubmitViewModel subVm, _) =>
                   DropdownButton(
                 underline: Container(height: 0),
                 elevation: 0,
@@ -418,7 +419,7 @@ class _SubmitPageState extends BaseState<SubmitPage, HomeViewModel> {
                   child: Text(_plate),
                 ),
                 isExpanded: true,
-                items: homeViewModel.model.webEntity.body.map((e) {
+                items: subVm.model.getPlate()..map((e) {
                   return DropdownMenuItem(
                     child: Text(e.webTitle),
                     value: e.webTitle,
