@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:grocery/entity/plate_entity.dart';
+import 'package:grocery/base/base_state.dart';
+import 'package:grocery/base/base_stateful_widget.dart';
+import 'package:grocery/entity/web_up_entity.dart';
 import 'package:grocery/main/submit/submit_viem_model.dart';
+import 'package:grocery/widget/flutter_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
-
-import '../../base/base_state.dart';
-import '../../base/base_stateful_widget.dart';
-import '../../widget/flutter_utils.dart';
-import '../home/home_view_model.dart';
 
 class SubmitPage extends BaseStatefulWidget {
   const SubmitPage({Key? key}) : super(key: key);
@@ -27,28 +25,25 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
   late TextEditingController _keyController;
   late TextEditingController _introduceController;
 
-  String _name = '';
-  String _url = '';
-  String _describe = '';
   String _classify = '选择类型*';
   String _plate = '选择板块*';
-  String _key = '';
-  String _introduce = '';
+
+  WebUpEntity webUp = WebUpEntity();
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController()
       ..addListener(() {
-        _name = _nameController.text;
+        webUp.webName = _nameController.text;
       });
     _describeController = TextEditingController()
       ..addListener(() {
-        _describe = _describeController.text;
+        webUp.webDescribe = _describeController.text;
       });
     _urlController = TextEditingController()
       ..addListener(() {
-        _url = _urlController.text;
+        webUp.webUrl = _urlController.text;
       });
     _classifyController = TextEditingController()
       ..addListener(() {
@@ -56,13 +51,12 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
       });
     _keyController = TextEditingController()
       ..addListener(() {
-        _key = _keyController.text;
+        webUp.webKey = _keyController.text;
       });
     _introduceController = TextEditingController()
       ..addListener(() {
-        _introduce = _introduceController.text;
+        webUp.webIntroduce = _introduceController.text;
       });
-
     viewModel.getPlate();
   }
 
@@ -169,21 +163,28 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
           ),
           padding: const EdgeInsets.symmetric(horizontal: Insets.px_8),
         ),
-        Container(
-          height: Insets.px_38,
-          width: 200,
-          margin: const EdgeInsets.only(bottom: Insets.px_64),
-          child: TextButton(
-            onPressed: () {},
-            child: const Text(
-              '提交',
-              style: TextStyle(color: Colors.white),
-            ),
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.blue),
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(Insets.px_4),
+        GestureDetector(
+          onTap: (){
+            // viewModel.addWebDetail(webDetail);
+          },
+          child: Container(
+            height: Insets.px_38,
+            width: 200,
+            margin: const EdgeInsets.only(bottom: Insets.px_64),
+            child: TextButton(
+              onPressed: () {
+                viewModel.addWebDetail(webUp);
+              },
+              child: const Text(
+                '提交',
+                style: TextStyle(color: Colors.white),
+              ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.blue),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(Insets.px_4),
+                  ),
                 ),
               ),
             ),
@@ -434,6 +435,7 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
                   });
                   for (var plate in viewModel.model.plateEntity.body) {
                     if (plate.webTitle == value) {
+                      webUp.webId = plate.webId;
                       debugPrint('value:  $value');
                       viewModel.getClassify(plate.webId);
                       break;
@@ -468,16 +470,21 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
                   child: Text(_classify),
                 ),
                 isExpanded: true,
-                items: subVM.model.plateEntity.body.map((e) {
+                items: subVM.model.classifyEntity.body.map((e) {
                   return DropdownMenuItem(
-                    child: Text(e.webTitle),
-                    value: e.webTitle,
+                    child: Text(e.webSubName),
+                    value: e.webSubName,
                   );
                 }).toList(),
                 onChanged: (String? value) {
                   setState(() {
                     _classify = value!;
                   });
+                  for (var classify in subVM.model.classifyEntity.body) {
+                    if (classify.webSubName == value) {
+                      webUp.webSubId = classify.webSubId;
+                    }
+                  }
                 },
               ),
             ),

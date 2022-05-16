@@ -10,8 +10,8 @@ class BaseDio {
 
   static const codeSuccess = 200;
   static const codeTimeOut = -1;
-  static const connectTimeOut = 15000;
-  static const receiveTimeout = 15000;
+  static const connectTimeOut = 15*1000;
+  static const receiveTimeout = 15*1000;
 
   static BaseDio getInstance() {
     return _baseDio;
@@ -29,7 +29,7 @@ class BaseDio {
         },
         receiveTimeout: receiveTimeout,
         connectTimeout: connectTimeOut); // 设置超时时间等 ...
-    dio.interceptors.add(NetInterceptorLog()); // 添加拦截器，如 token之类，需要全局使用的参数
+    // dio.interceptors.add(NetInterceptorLog()); // 添加拦截器，如 token之类，需要全局使用的参数
     dio.interceptors.add(PrettyDioLogger(
       // 添加日志格式化工具类
       requestHeader: true,

@@ -10,6 +10,6 @@ class Api {
 
   static getData<T>(Map<String, dynamic> param) {
     return NetManager.getInstance(baseUrl: NetUrl.dataBaseUrl)
-        .get<T>(NetUrl.web, params: param);
+        .get<T>(NetUrl.web , params: param);
   }
 }

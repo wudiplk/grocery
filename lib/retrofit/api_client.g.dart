@@ -68,7 +68,7 @@ class _ApiClient implements ApiClient {
   @override
   Future<ClassifyEntity> getClassify(webId) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'webId': webId};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     final _result = await _dio.fetch<Map<String, dynamic>>(
@@ -78,6 +78,23 @@ class _ApiClient implements ApiClient {
                     queryParameters: queryParameters, data: _data)
                 .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
     final value = ClassifyEntity.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<ResultEntity> addWebDetail(webUp) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(webUp.toJson());
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ResultEntity>(
+            Options(method: 'POST', headers: _headers, extra: _extra)
+                .compose(_dio.options, '/web/addWebDetail',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ResultEntity.fromJson(_result.data!);
     return value;
   }
 

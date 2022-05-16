@@ -7,7 +7,7 @@ class ClassifyEntity {
 
 	late int status;
 	late String message;
-	late List<ClassifyBody> body;
+	late List<ClassifyBody> body=[];
   
   ClassifyEntity();
 

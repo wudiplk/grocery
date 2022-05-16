@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+
 /// 环境配置
 class EnvConfig {
   final String appTitle;
@@ -13,7 +15,7 @@ class EnvConfig {
 class Env {
 
   // 获取到当前环境
-  static const appEnv = String.fromEnvironment(EnvName.envKey);
+  static const appEnv = bool.fromEnvironment(EnvName.envKey);
 
   // 开发环境
   static final EnvConfig debugConfig = EnvConfig(
@@ -37,17 +39,22 @@ class Env {
 
   // 根据不同环境返回对应的环境配置
   static EnvConfig _getEnvConfig() {
-    print('$appEnv');
-    switch (appEnv) {
-      case EnvName.debug:
-        return debugConfig;
-      case EnvName.release:
-        return releaseConfig;
-      case EnvName.test:
-        return testConfig;
-      default:
-        return debugConfig;
+    debugPrint('----------------------------------------$appEnv');
+    if(true){
+      return releaseConfig;
+    }else{
+      return debugConfig;
     }
+    // switch (appEnv) {
+    //   case EnvName.debug:
+    //     return debugConfig;
+    //   case EnvName.release:
+    //     return releaseConfig;
+    //   case EnvName.test:
+    //     return testConfig;
+    //   default:
+    //     return debugConfig;
+    // }
   }
 
 }
@@ -55,7 +62,7 @@ class Env {
 /// 声明的环境
 abstract class EnvName {
   // 环境key
-  static const String envKey = "DART_DEFINE_APP_ENV";
+  static const String envKey = "dart.vm.product";
   // 环境value
   static const String debug = "debug";
   static const String release = "release";

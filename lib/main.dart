@@ -4,11 +4,11 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:grocery/main/about/about_page.dart';
 import 'package:grocery/main/comment/comment_page.dart';
 import 'package:grocery/main/detail/detail_page.dart';
-import 'package:grocery/main/good/good_page.dart';
 import 'package:grocery/main/home/home_page.dart';
 import 'package:grocery/main/link/link_page.dart';
 import 'package:grocery/main/submit/submit_page.dart';
 import 'package:grocery/widget/flutter_utils.dart';
+
 import 'com/global.dart';
 import 'com/injection/injection.dart';
 import 'generated/l10n.dart';
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Global.themes[Global.profile.theme],
       ),
       builder: EasyLoading.init(),
-      home: const SubmitPage(),
+      home: const HomePage(),
       routes: <String, WidgetBuilder>{
         PageRoutes.about: (context) => const AboutPage(),
         PageRoutes.link: (context) => const LinkPage(),

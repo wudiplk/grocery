@@ -8,8 +8,10 @@ import 'package:grocery/com/profile.dart';
 import 'package:grocery/entity/classify_entity.dart';
 import 'package:grocery/entity/dept_entity.dart';
 import 'package:grocery/entity/plate_entity.dart';
+import 'package:grocery/entity/result_entity.dart';
 import 'package:grocery/entity/retrofit_dept.dart';
 import 'package:grocery/entity/web_entity.dart';
+import 'package:grocery/entity/web_up_entity.dart';
 
 JsonConvert jsonConvert = JsonConvert();
 typedef JsonConvertFunction<T> = T Function(Map<String, dynamic> json);
@@ -22,11 +24,13 @@ class JsonConvert {
 		(DeptEntity).toString(): DeptEntity.fromJson,
 		(PlateEntity).toString(): PlateEntity.fromJson,
 		(PlateBody).toString(): PlateBody.fromJson,
+		(ResultEntity).toString(): ResultEntity.fromJson,
 		(RetrofitDept).toString(): RetrofitDept.fromJson,
 		(WebEntity).toString(): WebEntity.fromJson,
 		(WebBody).toString(): WebBody.fromJson,
 		(WebBodyWebSub).toString(): WebBodyWebSub.fromJson,
 		(WebBodyWebSubWebDetail).toString(): WebBodyWebSubWebDetail.fromJson,
+		(WebUpEntity).toString(): WebUpEntity.fromJson,
 	};
 
   T? convert<T>(dynamic value) {
@@ -120,6 +124,9 @@ class JsonConvert {
 		if(<PlateBody>[] is M){
 			return data.map<PlateBody>((Map<String, dynamic> e) => PlateBody.fromJson(e)).toList() as M;
 		}
+		if(<ResultEntity>[] is M){
+			return data.map<ResultEntity>((Map<String, dynamic> e) => ResultEntity.fromJson(e)).toList() as M;
+		}
 		if(<RetrofitDept>[] is M){
 			return data.map<RetrofitDept>((Map<String, dynamic> e) => RetrofitDept.fromJson(e)).toList() as M;
 		}
@@ -134,6 +141,9 @@ class JsonConvert {
 		}
 		if(<WebBodyWebSubWebDetail>[] is M){
 			return data.map<WebBodyWebSubWebDetail>((Map<String, dynamic> e) => WebBodyWebSubWebDetail.fromJson(e)).toList() as M;
+		}
+		if(<WebUpEntity>[] is M){
+			return data.map<WebUpEntity>((Map<String, dynamic> e) => WebUpEntity.fromJson(e)).toList() as M;
 		}
 
 		debugPrint("${M.toString()} not found");
