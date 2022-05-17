@@ -40,21 +40,11 @@ class Env {
   // 根据不同环境返回对应的环境配置
   static EnvConfig _getEnvConfig() {
     debugPrint('----------------------------------------$appEnv');
-    if(true){
+    if(appEnv){
       return releaseConfig;
     }else{
       return debugConfig;
     }
-    // switch (appEnv) {
-    //   case EnvName.debug:
-    //     return debugConfig;
-    //   case EnvName.release:
-    //     return releaseConfig;
-    //   case EnvName.test:
-    //     return testConfig;
-    //   default:
-    //     return debugConfig;
-    // }
   }
 
 }
