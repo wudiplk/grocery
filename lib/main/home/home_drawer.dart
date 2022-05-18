@@ -6,7 +6,6 @@ import 'package:grocery/widget/custom_expansion_list.dart';
 import 'package:grocery/widget/flutter_utils.dart';
 import 'package:grocery/widget/temp_data.dart';
 import 'package:provider/provider.dart';
-
 import '../../base/base_state.dart';
 import '../../base/base_stateful_widget.dart';
 import '../../com/global.dart';
@@ -14,11 +13,11 @@ import '../../entity/web_entity.dart';
 
 /// 侧滑栏
 class HomeDrawer extends BaseStatefulWidget {
-  late ScrollController _scrollController;
+  final ScrollController _scrollController;
 
-  List<double> _scrollList;
+  final List<double> _scrollList;
 
-  HomeDrawer(this._scrollController, this._scrollList, {Key? key})
+  const HomeDrawer(this._scrollController, this._scrollList, {Key? key})
       : super(key: key);
 
   @override
@@ -68,8 +67,11 @@ class _HomeDrawerState extends BaseState<HomeDrawer, HomeViewModel> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Icon(Icons.pets,
-                        size: Insets.px_32, color: Global.themeColor),
+                    SizedBox(
+                      width: Insets.px_32,
+                      height: Insets.px_32,
+                      child: Image.asset('images/grocery.png'),
+                    ),
                     Text(
                       S().title,
                       maxLines: 1,
@@ -169,12 +171,17 @@ class _HomeDrawerState extends BaseState<HomeDrawer, HomeViewModel> {
                 body[panelIndex].expanded = !isExpanded;
               });
               isExpandedIndex = panelIndex;
-              print(widget._scrollList.toString()); //子组件的大小
-              widget._scrollController.animateTo(
-                  Insets.width_360 + widget._scrollList[panelIndex],
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.decelerate);
-              widget._scrollList.clear();
+              if (widget._scrollList.isNotEmpty) {
+                debugPrint(widget._scrollList.toString()); //子组件的大小
+                double moveDistance = Insets.width_360;
+                for (int i = 0; i < panelIndex; i++) {
+                  moveDistance += widget._scrollList[i];
+                }
+                debugPrint('$moveDistance');
+                widget._scrollController.animateTo(moveDistance,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.decelerate);
+              }
             },
             children: List.generate(
                 body.length,
@@ -184,6 +191,7 @@ class _HomeDrawerState extends BaseState<HomeDrawer, HomeViewModel> {
                     isExpanded: body[index].expanded,
                     headerBuilder: (BuildContext context, bool isExpand) {
                       return Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(left: Insets.px_18),
@@ -197,7 +205,7 @@ class _HomeDrawerState extends BaseState<HomeDrawer, HomeViewModel> {
                             padding: const EdgeInsets.only(left: Insets.px_38),
                             child: Text(
                               body[index].webTitle,
-                              style: TextStyles.h2,
+                              style: TextStyles.h3,
                             ),
                           )
                         ],
@@ -206,11 +214,13 @@ class _HomeDrawerState extends BaseState<HomeDrawer, HomeViewModel> {
                     body: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: body[index].webSub.map((subItem) {
-                        return Text(
-                          subItem.webSubName,
-                          textAlign: TextAlign.start,
-                          style: TextStyles.h2,
-                        );
+                        return TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              subItem.webSubName,
+                              textAlign: TextAlign.start,
+                              style: TextStyles.h4,
+                            ));
                       }).toList(),
                     ))),
           )
@@ -219,9 +229,9 @@ class _HomeDrawerState extends BaseState<HomeDrawer, HomeViewModel> {
 }
 
 class HomeMenuItemLarge extends StatefulWidget {
-  WebBody item;
+  final WebBody item;
 
-  HomeMenuItemLarge({Key? key, required this.item}) : super(key: key);
+  const HomeMenuItemLarge({Key? key, required this.item}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -304,9 +314,9 @@ class _HomeMenuItemLargeState extends State<HomeMenuItemLarge> {
 }
 
 class HomeMenuItemMid extends StatefulWidget {
-  WebBody item;
+  final WebBody item;
 
-  HomeMenuItemMid({Key? key, required this.item}) : super(key: key);
+  const HomeMenuItemMid({Key? key, required this.item}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {

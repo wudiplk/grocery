@@ -194,8 +194,9 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
               callback: (RenderAfterLayout ral) {
                 // print(ral.size); //子组件的大小
                 // print(ral.offset);// 子组件在屏幕中坐标
-                _scrollList.add(ral.size.height);
-                print(ral.size.height);
+                if(_scrollList.length<homeVM.model.webEntity.body.length){
+                  _scrollList.add(ral.size.height);
+                }
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

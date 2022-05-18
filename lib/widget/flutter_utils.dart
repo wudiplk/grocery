@@ -103,16 +103,22 @@ class TextStyles {
     color: Global.themeColor,
   );
   static TextStyle h2 = TextStyle(
-      fontWeight: FontWeight.normal, fontSize: 16, color: Global.themeColor);
+      fontWeight: FontWeight.normal, fontSize: 18, color: Global.themeColor);
   static TextStyle h3 = TextStyle(
     fontWeight: FontWeight.bold,
-    fontSize: 18,
+    fontSize: 16,
+    color: Global.themeColor,
+  );
+  static TextStyle h4= TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 14,
     color: Global.themeColor,
   );
   static TextStyle footer = const TextStyle(
     fontSize: 12,
     color: Colors.black,
   );
+
   static late TextStyle body1 = raleWay.copyWith(color: Global.themeColor);
 }
 class PageRoutes {

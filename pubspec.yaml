@@ -72,7 +72,8 @@ flutter:
 #          style: normal
   uses-material-design: true
   assets:
-    - images/avatar.png
+    - images/grocery.png
+    - images/apple-touch-icon.png
     - anim/main/fish.riv
     - anim/main/car.riv
     - anim/main/rope.riv
