@@ -1,6 +1,7 @@
 import 'package:grocery/entity/classify_entity.dart';
 import 'package:grocery/entity/plate_entity.dart';
 import 'package:grocery/entity/result_entity.dart';
+import 'package:grocery/net/net_manager.dart';
 import 'package:grocery/retrofit/api_client.dart';
 import 'package:injectable/injectable.dart';
 
@@ -28,6 +29,13 @@ class SubmitModel {
   }
 
   addWebDetail(WebUpEntity webUp) async {
-    resultEntity = await ApiClient().addWebDetail(webUp);
+    resultEntity = await ApiClient().addWebDetail(
+        webUp.webId,
+        webUp.webSubId,
+        webUp.webName,
+        webUp.webUrl,
+        webUp.webDescribe,
+        webUp.webKey,
+        webUp.webIntroduce);
   }
 }

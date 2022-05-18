@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
-
-import 'base_view_model.dart';
+import 'package:flutter/material.dart';
 import '../com/injection/injection.dart';
+import 'base_view_model.dart';
 
 abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel>
     extends State<W> with BaseStateInterface {
@@ -24,7 +24,7 @@ abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel>
     viewModel.context = context;
     // 初始ViewModel
     viewModel.init();
-
+    // 初始化土司
     onBuildStart();
   }
 
@@ -37,11 +37,13 @@ abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel>
   void dispose() {
     super.dispose();
   }
+
 }
 
 abstract class BaseStateInterface {
   /// 构建结束
   void onBuildFinish();
+
   /// 构建开始
   void onBuildStart();
 }

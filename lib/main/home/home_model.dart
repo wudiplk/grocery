@@ -9,12 +9,16 @@ import '../../entity/web_entity.dart';
 @injectable
 class HomeModel {
   late bool isPause = false;
+  late int panelIndex = 0;
 
   late List<DeptEntity> list = [];
 
   late WebEntity webEntity=WebEntity();
 
+
+
   HomeModel();
+
 
   getDept() async {
     list = await Api.getData<List<DeptEntity>>({});

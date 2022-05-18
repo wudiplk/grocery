@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:grocery/base/base_state.dart';
 import 'package:grocery/base/base_stateful_widget.dart';
+import 'package:grocery/com/global.dart';
 import 'package:grocery/entity/web_up_entity.dart';
 import 'package:grocery/main/submit/submit_viem_model.dart';
 import 'package:grocery/widget/flutter_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
+
+import '../../widget/my_toast.dart';
 
 class SubmitPage extends BaseStatefulWidget {
   const SubmitPage({Key? key}) : super(key: key);
@@ -29,6 +33,8 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
   String _plate = '选择板块*';
 
   WebUpEntity webUp = WebUpEntity();
+
+  late FToast fToast;
 
   @override
   void initState() {
@@ -58,7 +64,12 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
         webUp.webIntroduce = _introduceController.text;
       });
     viewModel.getPlate();
+
+    fToast = FToast();
+    fToast.init(context);
   }
+
+  late String content;
 
   @override
   Widget build(BuildContext context) {
@@ -163,28 +174,32 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
           ),
           padding: const EdgeInsets.symmetric(horizontal: Insets.px_8),
         ),
-        GestureDetector(
-          onTap: (){
-            // viewModel.addWebDetail(webDetail);
-          },
-          child: Container(
-            height: Insets.px_38,
-            width: 200,
-            margin: const EdgeInsets.only(bottom: Insets.px_64),
-            child: TextButton(
-              onPressed: () {
-                viewModel.addWebDetail(webUp);
-              },
-              child: const Text(
-                '提交',
-                style: TextStyle(color: Colors.white),
-              ),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blue),
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(Insets.px_4),
-                  ),
+        Container(
+          height: Insets.px_38,
+          width: 200,
+          margin: const EdgeInsets.only(bottom: Insets.px_64),
+          child: TextButton(
+            onPressed: () {
+              if (webUp.webKey.isEmpty ||
+                  webUp.webIntroduce.isEmpty ||
+                  webUp.webDescribe.isEmpty ||
+                  webUp.webUrl.isEmpty ||
+                  webUp.webName.isEmpty ||
+                  webUp.webId == 0 ||
+                  webUp.webSubId == 0) {
+                MyToast().showToast(context, "请吧数据补充完整");
+              }
+              viewModel.addWebDetail(webUp);
+            },
+            child: const Text(
+              '提交',
+              style: TextStyle(color: Colors.white),
+            ),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.blue),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(Insets.px_4),
                 ),
               ),
             ),

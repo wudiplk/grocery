@@ -82,12 +82,20 @@ class _ApiClient implements ApiClient {
   }
 
   @override
-  Future<ResultEntity> addWebDetail(webUp) async {
+  Future<ResultEntity> addWebDetail(webId, webSubId, webName, webUrl,
+      webDescribe, webKey, webIntroduce) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'webId': webId,
+      r'webSubId': webSubId,
+      r'webName': webName,
+      r'webUrl': webUrl,
+      r'webDescribe': webDescribe,
+      r'webKey': webKey,
+      r'webIntroduce': webIntroduce
+    };
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(webUp.toJson());
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<ResultEntity>(
             Options(method: 'POST', headers: _headers, extra: _extra)

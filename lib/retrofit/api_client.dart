@@ -32,5 +32,12 @@ abstract class ApiClient {
   Future<ClassifyEntity> getClassify(@Query("webId") int webId);
 
   @POST('/web/addWebDetail')
-  Future<ResultEntity> addWebDetail(@Body() WebUpEntity webUp);
+  Future<ResultEntity> addWebDetail(
+      @Query("webId") int webId,
+      @Query("webSubId") int webSubId,
+      @Query("webName") String webName,
+      @Query("webUrl") String webUrl,
+      @Query("webDescribe") String webDescribe,
+      @Query("webKey") String webKey,
+      @Query("webIntroduce") String webIntroduce);
 }

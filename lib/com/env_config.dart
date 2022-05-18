@@ -40,7 +40,7 @@ class Env {
   // 根据不同环境返回对应的环境配置
   static EnvConfig _getEnvConfig() {
     debugPrint('----------------------------------------$appEnv');
-    if(appEnv){
+    if(true){
       return releaseConfig;
     }else{
       return debugConfig;

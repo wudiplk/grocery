@@ -18,7 +18,6 @@ class SubmitViewModel extends BaseViewModel<SubmitModel> {
   }
 
   addWebDetail(WebUpEntity webUp) async {
-    debugPrint(webUp.toString());
     await model.addWebDetail(webUp);
     notifyListeners();
   }

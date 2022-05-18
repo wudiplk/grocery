@@ -20,9 +20,10 @@ class Global {
   static List<MaterialColor> get themes => _themes;
 
   static MaterialColor themeColor = _themes[0];
+
   static Color bgColor = Colors.white;
 
-  static bool isMemorial=false;
+  static bool isMemorial = false;
 
   // 是否为release版
   static bool get isRelease => const bool.fromEnvironment("dart.vm.product");
@@ -53,4 +54,14 @@ class Global {
   // 持久化Profile信息
   static saveProfile() =>
       _prefs.setString("profile", jsonEncode(profile.toJson()));
+
+  static change() {
+    if (profile.theme < _themes.length) {
+      profile.theme++;
+    } else {
+      profile.theme = 0;
+    }
+    themeColor = _themes.elementAt(profile.theme);
+    saveProfile();
+  }
 }

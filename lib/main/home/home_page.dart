@@ -4,7 +4,9 @@ import 'package:grocery/base/base_state.dart';
 import 'package:grocery/base/base_stateful_widget.dart';
 import 'package:grocery/com/global.dart';
 import 'package:grocery/generated/l10n.dart';
+import 'package:grocery/widget/after_layout.dart';
 import 'package:grocery/widget/flutter_utils.dart';
+import 'package:grocery/widget/my_toast.dart';
 import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -24,7 +26,7 @@ class HomePage extends BaseStatefulWidget {
 
 class _HomeState extends BaseState<HomePage, HomeViewModel>
     with SingleTickerProviderStateMixin {
-  int _subTitlePosition = 0;
+  final int _subTitlePosition = 0;
 
   bool _scrollToTop = false;
 
@@ -32,6 +34,7 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
 
   final ScrollController _scrollController = ScrollController();
 
+  List<double> _scrollList = [];
   @override
   void initState() {
     super.initState();
@@ -65,9 +68,9 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
         body: buildBody(_queryData),
         floatingActionButton: buildFloatingAction(),
         drawer: Responsive.isSmallScreen(context)
-            ? const SizedBox(
+            ? SizedBox(
                 width: Insets.width_230,
-                child: Drawer(child: HomeDrawer()),
+                child: Drawer(child: HomeDrawer(_scrollController,_scrollList)),
               )
             : const SizedBox(),
         // This trailing comma makes auto-formatting nicer for build methods.
@@ -96,7 +99,7 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
                     width: Responsive.isMediumScreen(context)
                         ? Insets.width_58
                         : Insets.width_230,
-                    child: const HomeDrawer(),
+                    child: HomeDrawer(_scrollController,_scrollList),
                   ),
             Expanded(
               child: Container(
@@ -170,7 +173,7 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
               child: Text('  粤ICP备2021107512号', style: TextStyles.footer),
               onPointerDown: (PointerEvent event) async {
                 var _url = "https://beian.miit.gov.cn/";
-                if (!await launch(_url)) {
+                if (!await launchUrl(Uri.parse(_url))) {
                   throw 'Could not launch $_url';
                 }
               },
@@ -187,46 +190,61 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
   /// 创建主页网站列表详情
   Widget buildItem(BuildContext buildContext, int position) {
     return Consumer(
-        builder: (buildContext, HomeViewModel homeVM, _) => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: Insets.px_16),
-                  child: TextButton.icon(
-                      onPressed: () {},
-                      icon: Icon(IconData(
+        builder: (buildContext, HomeViewModel homeVM, _) => AfterLayout(
+              callback: (RenderAfterLayout ral) {
+                // print(ral.size); //子组件的大小
+                // print(ral.offset);// 子组件在屏幕中坐标
+                _scrollList.add(ral.size.height);
+                print(ral.size.height);
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: Insets.px_16),
+                    child: TextButton.icon(
+                        onPressed: () {},
+                        icon: Icon(IconData(
+                            homeVM.model.webEntity.body
+                                .elementAt(position)
+                                .webIcon,
+                            fontFamily: 'MaterialIcons')),
+                        label: Text(
                           homeVM.model.webEntity.body
                               .elementAt(position)
-                              .webIcon,
-                          fontFamily: 'MaterialIcons')),
-                      label: Text(
-                        homeVM.model.webEntity.body
-                            .elementAt(position)
-                            .webTitle,
-                        style: TextStyles.h3,
-                      )),
-                ),
-                HomeSubTitle(homeVM.model.webEntity.body
-                    .elementAt(position)
-                    .webSub),
-                Wrap(
-                  direction: Axis.horizontal,
-                  spacing: 16.0,
-                  runSpacing: 6,
-                  alignment: WrapAlignment.start,
-                  children: List<HomeItem>.generate(
-                      homeVM
-                          .model
-                          .webEntity
-                          .body[position]
-                          .webSub[_subTitlePosition]
-                          .webDetail
-                          .length, (itemPosition) {
-                    return HomeItem(homeVM.model.webEntity.body[position]
-                        .webSub[_subTitlePosition].webDetail[itemPosition]);
-                  }),
-                )
-              ],
+                              .webTitle,
+                          style: TextStyles.h3,
+                        )),
+                  ),
+                  HomeSubTitle(
+                      homeVM.model.webEntity.body.elementAt(position).webSub),
+                  Wrap(
+                    direction: Axis.horizontal,
+                    spacing: 16.0,
+                    runSpacing: 6,
+                    alignment: WrapAlignment.start,
+                    children: List<HomeItem>.generate(
+                        homeVM
+                            .model
+                            .webEntity
+                            .body[position]
+                            .webSub[_subTitlePosition]
+                            .webDetail
+                            .length, (itemPosition) {
+                      return HomeItem(
+                          homeVM
+                              .model
+                              .webEntity
+                              .body[position]
+                              .webSub[_subTitlePosition]
+                              .webDetail[itemPosition],
+                          homeVM.model.webEntity.body
+                              .elementAt(position)
+                              .webIcon);
+                    }),
+                  )
+                ],
+              ),
             ));
   }
 
@@ -276,11 +294,8 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
           child: FloatingActionButton(
             tooltip: '下一页',
             heroTag: 'next',
-            onPressed: () async {
-              // viewModel.getDept();
-              var result = await Navigator.pushNamed(context, PageRoutes.about,
-                  arguments: "hi");
-              debugPrint("路由返回值: $result");
+            onPressed: () {
+              MyToast().showToast(context, "主页");
             },
             child: const Icon(
               Icons.home,
@@ -293,9 +308,7 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
           child: FloatingActionButton(
             tooltip: "天气",
             heroTag: 'weather',
-            onPressed: () {
-              /* Do something */
-            },
+            onPressed: () {},
             child: const Icon(
               Icons.nights_stay,
             ),
@@ -309,6 +322,7 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
 /// 主页菜单耳机列表
 class HomeSubTitle extends StatefulWidget {
   late List<WebBodyWebSub> webSub;
+
   HomeSubTitle(this.webSub, {Key? key}) : super(key: key);
 
   @override
@@ -318,7 +332,6 @@ class HomeSubTitle extends StatefulWidget {
 }
 
 class _HomeSubTitleState extends BaseState<HomeSubTitle, HomeViewModel> {
-
   int _index = 0;
 
   @override
@@ -412,7 +425,10 @@ class _HomeSubTitleState extends BaseState<HomeSubTitle, HomeViewModel> {
 /// 主页菜单item
 class HomeItem extends StatefulWidget {
   WebBodyWebSubWebDetail webDetail;
-  HomeItem(this.webDetail, {Key? key}) : super(key: key);
+
+  int webIcon;
+
+  HomeItem(this.webDetail, this.webIcon, {Key? key}) : super(key: key);
 
   @override
   _HomeItemState createState() {
@@ -437,8 +453,12 @@ class _HomeItemState extends State<HomeItem> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, PageRoutes.detail, arguments: 'detail');
+      onTap: () async {
+        // Navigator.pushNamed(context, PageRoutes.detail, arguments: 'detail');
+        var _url = widget.webDetail.webUrl;
+        if (!await launchUrl(Uri.parse(_url))) {
+          throw 'Could not launch $_url';
+        }
       },
       child: SizedBox(
         height: 42,
@@ -480,11 +500,9 @@ class _HomeItemState extends State<HomeItem> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: Insets.px_12),
-                    child: Image.network(
-                      widget.webDetail.webUrl + 'favicon.ico',
-                      height: Insets.px_24,
-                      width: Insets.px_24,
-                      fit: BoxFit.contain,
+                    child: Icon(
+                      IconData(widget.webIcon, fontFamily: 'MaterialIcons'),
+                      color: Global.themeColor,
                     ),
                   ),
                   Expanded(
@@ -492,9 +510,9 @@ class _HomeItemState extends State<HomeItem> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: Insets.px_12),
                     child: Text(
-                      widget.webDetail.webName,
+                      widget.webDetail.webName.toString(),
                       maxLines: 1,
-                      textAlign: TextAlign.left,
+                      textAlign: TextAlign.center,
                       softWrap: false,
                     ),
                   )),

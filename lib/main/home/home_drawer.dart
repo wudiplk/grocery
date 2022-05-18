@@ -14,7 +14,12 @@ import '../../entity/web_entity.dart';
 
 /// 侧滑栏
 class HomeDrawer extends BaseStatefulWidget {
-  const HomeDrawer({Key? key}) : super(key: key);
+  late ScrollController _scrollController;
+
+  List<double> _scrollList;
+
+  HomeDrawer(this._scrollController, this._scrollList, {Key? key})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -70,7 +75,11 @@ class _HomeDrawerState extends BaseState<HomeDrawer, HomeViewModel> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
-                      style: TextStyles.h1,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Global.themeColor,
+                      ),
                     )
                   ],
                 ),
@@ -160,6 +169,12 @@ class _HomeDrawerState extends BaseState<HomeDrawer, HomeViewModel> {
                 body[panelIndex].expanded = !isExpanded;
               });
               isExpandedIndex = panelIndex;
+              print(widget._scrollList.toString()); //子组件的大小
+              widget._scrollController.animateTo(
+                  Insets.width_360 + widget._scrollList[panelIndex],
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.decelerate);
+              widget._scrollList.clear();
             },
             children: List.generate(
                 body.length,
@@ -173,7 +188,8 @@ class _HomeDrawerState extends BaseState<HomeDrawer, HomeViewModel> {
                           Padding(
                             padding: const EdgeInsets.only(left: Insets.px_18),
                             child: Icon(
-                              IconData(body[index].webIcon,fontFamily: 'MaterialIcons'),
+                              IconData(body[index].webIcon,
+                                  fontFamily: 'MaterialIcons'),
                               color: Global.themeColor,
                             ),
                           ),
@@ -267,7 +283,7 @@ class _HomeMenuItemLargeState extends State<HomeMenuItemLarge> {
                 Padding(
                   padding: const EdgeInsets.only(left: Insets.px_18),
                   child: Icon(
-                    IconData(widget.item.webIcon,fontFamily: 'MaterialIcons'),
+                    IconData(widget.item.webIcon, fontFamily: 'MaterialIcons'),
                     color: Global.themeColor,
                   ),
                 ),
@@ -327,7 +343,7 @@ class _HomeMenuItemMid extends State<HomeMenuItemMid> {
                   borderRadius: BorderRadius.circular(Insets.px_4))
               : const BoxDecoration(),
           child: Icon(
-            IconData(widget.item.webIcon,fontFamily: 'MaterialIcons'),
+            IconData(widget.item.webIcon, fontFamily: 'MaterialIcons'),
             color: Global.themeColor,
           ),
         ),

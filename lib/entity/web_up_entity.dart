@@ -5,13 +5,13 @@ import 'package:grocery/generated/json/web_up_entity.g.dart';
 @JsonSerializable()
 class WebUpEntity {
 
-	late int webId;
-	late int webSubId;
-	late String webName;
-	late String webUrl;
-	late String webDescribe;
-	late String webKey;
-	late String webIntroduce;
+	late int webId=0;
+	late int webSubId=0;
+	late String webName='';
+	late String webUrl='';
+	late String webDescribe='';
+	late String webKey='';
+	late String webIntroduce='';
   
   WebUpEntity();
 
