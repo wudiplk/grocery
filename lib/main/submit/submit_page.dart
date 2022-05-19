@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:grocery/base/base_state.dart';
 import 'package:grocery/base/base_stateful_widget.dart';
-import 'package:grocery/com/global.dart';
 import 'package:grocery/entity/web_up_entity.dart';
 import 'package:grocery/main/submit/submit_viem_model.dart';
 import 'package:grocery/widget/flutter_utils.dart';
@@ -22,54 +20,41 @@ class SubmitPage extends BaseStatefulWidget {
 }
 
 class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
-  late TextEditingController _nameController;
-  late TextEditingController _urlController;
-  late TextEditingController _describeController;
-  late TextEditingController _classifyController;
-  late TextEditingController _keyController;
-  late TextEditingController _introduceController;
-
   String _classify = '选择类型*';
   String _plate = '选择板块*';
 
   WebUpEntity webUp = WebUpEntity();
 
-  late FToast fToast;
-
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController()
+    viewModel.nameController = TextEditingController()
       ..addListener(() {
-        webUp.webName = _nameController.text;
+        webUp.webName = viewModel.nameController.text;
       });
-    _describeController = TextEditingController()
+    viewModel.describeController = TextEditingController()
       ..addListener(() {
-        webUp.webDescribe = _describeController.text;
+        webUp.webDescribe = viewModel.describeController.text;
       });
-    _urlController = TextEditingController()
+    viewModel.urlController = TextEditingController()
       ..addListener(() {
-        webUp.webUrl = _urlController.text;
+        webUp.webUrl = viewModel.urlController.text;
       });
-    _classifyController = TextEditingController()
+    viewModel.classifyController = TextEditingController()
       ..addListener(() {
-        _classify = _classifyController.text;
+        _classify = viewModel.classifyController.text;
       });
-    _keyController = TextEditingController()
+    viewModel.keyController = TextEditingController()
       ..addListener(() {
-        webUp.webKey = _keyController.text;
+        webUp.webKey = viewModel.keyController.text;
       });
-    _introduceController = TextEditingController()
+    viewModel.introduceController = TextEditingController()
       ..addListener(() {
-        webUp.webIntroduce = _introduceController.text;
+        webUp.webIntroduce = viewModel.introduceController.text;
       });
     viewModel.getPlate();
 
-    fToast = FToast();
-    fToast.init(context);
   }
-
-  late String content;
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +152,7 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
           width: double.infinity,
           height: 200,
           child: TextField(
-            controller: _introduceController,
+            controller: viewModel.introduceController,
             decoration: const InputDecoration(
               border: InputBorder.none,
             ),
@@ -188,8 +173,9 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
                   webUp.webId == 0 ||
                   webUp.webSubId == 0) {
                 MyToast().showToast(context, "请吧数据补充完整");
+              }else{
+                viewModel.addWebDetail(webUp);
               }
-              viewModel.addWebDetail(webUp);
             },
             child: const Text(
               '提交',
@@ -237,7 +223,7 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
                   const EdgeInsets.only(right: Insets.px_4, top: Insets.px_16),
               height: Insets.px_38,
               child: TextField(
-                controller: _nameController,
+                controller: viewModel.nameController,
                 textAlignVertical: TextAlignVertical.center,
                 keyboardType: TextInputType.url,
                 decoration: const InputDecoration(
@@ -281,7 +267,7 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
                   const EdgeInsets.only(left: Insets.px_4, top: Insets.px_16),
               height: Insets.px_38,
               child: TextField(
-                controller: _urlController,
+                controller: viewModel.urlController,
                 textAlignVertical: TextAlignVertical.center,
                 keyboardType: TextInputType.url,
                 decoration: const InputDecoration(
@@ -332,7 +318,7 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
                   const EdgeInsets.only(right: Insets.px_4, top: Insets.px_16),
               height: Insets.px_38,
               child: TextField(
-                controller: _describeController,
+                controller: viewModel.describeController,
                 textAlignVertical: TextAlignVertical.center,
                 keyboardType: TextInputType.url,
                 decoration: const InputDecoration(
@@ -377,7 +363,7 @@ class _SubmitPageState extends BaseState<SubmitPage, SubmitViewModel> {
               padding: const EdgeInsets.symmetric(horizontal: Insets.px_8),
               height: Insets.px_38,
               child: TextField(
-                controller: _keyController,
+                controller: viewModel.keyController,
                 textAlignVertical: TextAlignVertical.center,
                 keyboardType: TextInputType.url,
                 decoration: const InputDecoration(

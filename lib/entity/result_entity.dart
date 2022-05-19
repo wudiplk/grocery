@@ -5,7 +5,7 @@ import 'package:grocery/generated/json/result_entity.g.dart';
 @JsonSerializable()
 class ResultEntity {
 
-	late int status;
+	late int status=0;
 	late String message;
 	late String body;
   
