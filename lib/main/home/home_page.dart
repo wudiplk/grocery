@@ -26,15 +26,14 @@ class HomePage extends BaseStatefulWidget {
 
 class _HomeState extends BaseState<HomePage, HomeViewModel>
     with SingleTickerProviderStateMixin {
-  final int _subTitlePosition = 0;
-
   bool _scrollToTop = false;
 
   late MediaQueryData _queryData;
 
   final ScrollController _scrollController = ScrollController();
 
-  List<double> _scrollList = [];
+  final List<double> _scrollList = [];
+
   @override
   void initState() {
     super.initState();
@@ -70,7 +69,8 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
         drawer: Responsive.isSmallScreen(context)
             ? SizedBox(
                 width: Insets.width_230,
-                child: Drawer(child: HomeDrawer(_scrollController,_scrollList)),
+                child:
+                    Drawer(child: HomeDrawer(_scrollController, _scrollList)),
               )
             : const SizedBox(),
         // This trailing comma makes auto-formatting nicer for build methods.
@@ -99,7 +99,7 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
                     width: Responsive.isMediumScreen(context)
                         ? Insets.width_58
                         : Insets.width_230,
-                    child: HomeDrawer(_scrollController,_scrollList),
+                    child: HomeDrawer(_scrollController, _scrollList),
                   ),
             Expanded(
               child: Container(
@@ -194,7 +194,7 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
               callback: (RenderAfterLayout ral) {
                 // print(ral.size); //子组件的大小
                 // print(ral.offset);// 子组件在屏幕中坐标
-                if(_scrollList.length<homeVM.model.webEntity.body.length){
+                if (_scrollList.length < homeVM.model.webEntity.body.length) {
                   _scrollList.add(ral.size.height);
                 }
               },
@@ -229,7 +229,7 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
                             .model
                             .webEntity
                             .body[position]
-                            .webSub[_subTitlePosition]
+                            .webSub[viewModel.subTitlePosition]
                             .webDetail
                             .length, (itemPosition) {
                       return HomeItem(
@@ -237,7 +237,7 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
                               .model
                               .webEntity
                               .body[position]
-                              .webSub[_subTitlePosition]
+                              .webSub[viewModel.subTitlePosition]
                               .webDetail[itemPosition],
                           homeVM.model.webEntity.body
                               .elementAt(position)
@@ -380,17 +380,20 @@ class _HomeSubTitleState extends BaseState<HomeSubTitle, HomeViewModel> {
                   setState(() {
                     _index = 0;
                   });
+                  viewModel.updateSubContent(_index);
                 },
                 onEnter: (PointerEnterEvent event) {
                   setState(() {
                     _index = index;
                   });
+                  viewModel.updateSubContent(_index);
                 },
                 child: GestureDetector(
                   onTap: () {
                     setState(() {
                       _index = index;
                     });
+                    viewModel.updateSubContent(_index);
                   },
                   child: Container(
                     margin: const EdgeInsets.symmetric(horizontal: Insets.px_4),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:grocery/base/base_view_model.dart';
 import 'package:injectable/injectable.dart';
 
@@ -7,12 +7,13 @@ import 'home_model.dart';
 
 @injectable
 class HomeViewModel extends BaseViewModel<HomeModel> {
-  int _subTitlePosition = 0;
 
-  int get subTitlePosition => _subTitlePosition;
+  int subTitlePosition = 0;
 
-  set subTitlePosition(int value) {
-    _subTitlePosition = value;
+
+  updateSubContent(int value){
+    debugPrint('$value');
+    subTitlePosition=value;
     notifyListeners();
   }
 

@@ -301,7 +301,7 @@ class _HomeMenuItemLargeState extends State<HomeMenuItemLarge> {
                   padding: const EdgeInsets.only(left: Insets.px_38),
                   child: Text(
                     widget.item.webTitle,
-                    style: TextStyles.h2,
+                    style: TextStyles.h3,
                   ),
                 ),
               ],
