@@ -192,8 +192,6 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
     return Consumer(
         builder: (buildContext, HomeViewModel homeVM, _) => AfterLayout(
               callback: (RenderAfterLayout ral) {
-                // print(ral.size); //子组件的大小
-                // print(ral.offset);// 子组件在屏幕中坐标
                 if (_scrollList.length < homeVM.model.webEntity.body.length) {
                   _scrollList.add(ral.size.height);
                 }
@@ -322,9 +320,9 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
 
 /// 主页菜单耳机列表
 class HomeSubTitle extends StatefulWidget {
-  late List<WebBodyWebSub> webSub;
+  final List<WebBodyWebSub> webSub;
 
-  HomeSubTitle(this.webSub, {Key? key}) : super(key: key);
+  const HomeSubTitle(this.webSub, {Key? key}) : super(key: key);
 
   @override
   _HomeSubTitleState createState() {
@@ -333,7 +331,7 @@ class HomeSubTitle extends StatefulWidget {
 }
 
 class _HomeSubTitleState extends BaseState<HomeSubTitle, HomeViewModel> {
-  int _index = 0;
+  int selectIndex = 0;
 
   @override
   void initState() {
@@ -350,67 +348,54 @@ class _HomeSubTitleState extends BaseState<HomeSubTitle, HomeViewModel> {
     // TODO: implement build
     return Container(
       margin: const EdgeInsets.only(bottom: Insets.px_12),
-      height: Insets.px_40,
-      padding: const EdgeInsets.symmetric(horizontal: Insets.px_4),
+      padding: const EdgeInsets.all(Insets.px_4),
       decoration: BoxDecoration(
         color: Colors.grey.withOpacity(0.2),
         borderRadius: const BorderRadius.all(Radius.circular(Insets.px_40 / 2)),
       ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          AnimatedPositionedDirectional(
-              start: _index * (Insets.px_64 + Insets.px_4 * 2),
-              width: Insets.px_64 + Insets.px_4 * 2,
-              height: Insets.px_32,
-              curve: Curves.easeInOutCubic,
-              child: const DecoratedBox(
+      child: Wrap(
+        runSpacing: Insets.px_4, // 纵轴（垂直）方向间距
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: List.generate(widget.webSub.length, (index) {
+          return MouseRegion(
+            onExit: (PointerExitEvent event) {
+              setState(() {
+                selectIndex = 0;
+              });
+              viewModel.updateSubContent(selectIndex);
+            },
+            onEnter: (PointerEnterEvent event) {
+              setState(() {
+                selectIndex = index;
+              });
+              viewModel.updateSubContent(selectIndex);
+            },
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectIndex = index;
+                });
+                viewModel.updateSubContent(selectIndex);
+              },
+              child: Container(
+                alignment: Alignment.center,
+                width: Insets.px_64,
+                height: Insets.px_32,
                 decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.all(Radius.circular(Insets.px_16)),
+                  color:
+                      selectIndex == index ? Colors.blue : Colors.transparent,
+                  borderRadius:
+                      const BorderRadius.all(Radius.circular(Insets.px_16)),
+                ),
+                child: Text(
+                  widget.webSub.elementAt(index).webSubName,
+                  style: TextStyle(
+                      color: selectIndex == index ? Colors.white : Colors.grey),
                 ),
               ),
-              duration: const Duration(milliseconds: 250)),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: List.generate(widget.webSub.length, (index) {
-              return MouseRegion(
-                onExit: (PointerExitEvent event) {
-                  setState(() {
-                    _index = 0;
-                  });
-                  viewModel.updateSubContent(_index);
-                },
-                onEnter: (PointerEnterEvent event) {
-                  setState(() {
-                    _index = index;
-                  });
-                  viewModel.updateSubContent(_index);
-                },
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _index = index;
-                    });
-                    viewModel.updateSubContent(_index);
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: Insets.px_4),
-                    alignment: Alignment.center,
-                    width: Insets.px_64,
-                    height: Insets.px_32,
-                    child: Text(
-                      widget.webSub.elementAt(index).webSubName,
-                      style: TextStyle(
-                          color: _index == index ? Colors.white : Colors.grey),
-                    ),
-                  ),
-                ),
-              );
-            }),
-          ),
-        ],
+            ),
+          );
+        }),
       ),
     );
   }
@@ -428,11 +413,11 @@ class _HomeSubTitleState extends BaseState<HomeSubTitle, HomeViewModel> {
 
 /// 主页菜单item
 class HomeItem extends StatefulWidget {
-  WebBodyWebSubWebDetail webDetail;
+  final WebBodyWebSubWebDetail webDetail;
 
-  int webIcon;
+  final int webIcon;
 
-  HomeItem(this.webDetail, this.webIcon, {Key? key}) : super(key: key);
+  const HomeItem(this.webDetail, this.webIcon, {Key? key}) : super(key: key);
 
   @override
   _HomeItemState createState() {
@@ -551,7 +536,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             width: 58,
             child: Icon(
               Icons.person,
-              color: Colors.white,
+              color: Colors.blue,
             ),
           ),
         ),
@@ -560,7 +545,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           width: 58,
           child: Icon(
             Icons.search,
-            color: Colors.white,
+            color: Colors.blue,
           ),
         ),
         Responsive.isSmallScreen(context)
@@ -573,7 +558,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   width: 58,
                   child: Icon(
                     Icons.menu,
-                    color: Colors.white,
+                    color: Colors.blue,
                   ),
                 ),
               )

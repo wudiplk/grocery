@@ -100,14 +100,18 @@ class _HomeDrawerState extends BaseState<HomeDrawer, HomeViewModel> {
           ),
           top: 0,
         ),
-        Positioned(
-          child: Column(
-            children: tempTips.map((tip) {
-              return HomeMenuItemLarge(item: tip);
-            }).toList(),
-          ),
-          bottom: 0,
-        )
+        Responsive.isMobileDevice
+            ? Container()
+            : Responsive.getHeight(context) < Insets.height_800
+                ? Container()
+                : Positioned(
+                    child: Column(
+                      children: tempTips.map((tip) {
+                        return HomeMenuItemLarge(item: tip);
+                      }).toList(),
+                    ),
+                    bottom: 0,
+                  )
       ],
     );
   }
@@ -136,15 +140,17 @@ class _HomeDrawerState extends BaseState<HomeDrawer, HomeViewModel> {
             ],
           ),
         ),
-        Positioned(
-          bottom: 0,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: tempTips.map((tip) {
-              return HomeMenuItemMid(item: tip);
-            }).toList(),
-          ),
-        ),
+        Responsive.getHeight(context) < Insets.height_800
+            ? Container()
+            : Positioned(
+                bottom: 0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: tempTips.map((tip) {
+                    return HomeMenuItemMid(item: tip);
+                  }).toList(),
+                ),
+              ),
       ],
     );
   }

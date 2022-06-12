@@ -46,6 +46,9 @@ class Responsive {
   static double getWidth(BuildContext context) {
     return MediaQuery.of(context).size.width;
   }
+  static double getHeight(BuildContext context) {
+    return MediaQuery.of(context).size.height;
+  }
 
   static bool get isMobileDevice =>
       !kIsWeb && (Platform.isIOS || Platform.isAndroid);
@@ -82,6 +85,9 @@ class Insets {
   static const double width_300 = 300;
   static const double width_260 = 260;
   static const double width_360 = 360;
+  static const double height_500 = 500;
+  static const double height_800 = 800;
+
 }
 
 class Fonts {
