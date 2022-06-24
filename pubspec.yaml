@@ -64,12 +64,12 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-#  fonts:
-#    - family: Noto
-#      fonts:
-#        - asset: fonts/NotoSansSC-Regular.otf
-#        - asset: fonts/NotoSans-Regular.ttf
-#          style: normal
+  fonts:
+    - family: Noto
+      fonts:
+        - asset: fonts/NotoSansSC-Regular.otf
+        - asset: fonts/NotoSans-Regular.ttf
+          style: normal
   uses-material-design: true
   assets:
     - images/grocery.png

@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: S().title,
       theme: ThemeData(
-        primarySwatch: Global.themes[Global.profile.theme],
+        primarySwatch: Global.themes[Global.profile.theme],fontFamily: 'Noto'
       ),
       builder: EasyLoading.init(),
       home: const HomePage(),
