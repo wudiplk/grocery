@@ -125,6 +125,7 @@ class _HomeState extends BaseState<HomePage, HomeViewModel>
                 child: const RiveAnimation.asset(
                   'anim/main/loader.riv',
                   fit: BoxFit.cover,
+                  controllers: [],
                 ),
                 height: Responsive.isSmallScreen(context)
                     ? Insets.width_260

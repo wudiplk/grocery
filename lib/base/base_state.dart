@@ -15,7 +15,7 @@ abstract class BaseState<W extends StatefulWidget, VM extends BaseViewModel>
     isBuildFinish = false;
     // 获取Widget加载状态
     WidgetsBinding? widgetsBinding = WidgetsBinding.instance;
-    widgetsBinding!.addPostFrameCallback((timeStamp) {
+    widgetsBinding.addPostFrameCallback((timeStamp) {
       isBuildFinish = true;
     });
     // 获取ViewModel实例
